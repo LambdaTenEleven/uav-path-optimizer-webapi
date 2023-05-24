@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using UavPathOptimization.Application.Services;
-
-namespace UavPathOptimization.WebAPI;
+﻿namespace UavPathOptimization.WebAPI;
 
 public static class DependencyInjection
 {

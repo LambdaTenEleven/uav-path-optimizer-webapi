@@ -1,23 +1,32 @@
-﻿using GeoCoordinatePortable;
+﻿using FluentResults;
+using GeoCoordinatePortable;
 using Google.OrTools.ConstraintSolver;
+using MediatR;
 
-namespace UavPathOptimization.Application.Services;
+namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 
-public class PathOptimizerService : IPathOptimizerService
+public class OptimizePathHandler :
+    IRequestHandler<OptimizePathQuery, Result<IList<GeoCoordinate>>>
 {
     private const int SCALE = 100;
 
-    public IList<GeoCoordinate> OptimizePath(IList<GeoCoordinate> path)
+    public Task<Result<IList<GeoCoordinate>>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
     {
+        if (request.path.Count < 2)
+        {
+            var error = Result.Fail(new Error("Path must include more than 2 GeoCoordinate."));
+            return Task.FromResult<Result<IList<GeoCoordinate>>>(error);
+        }
+
         // create distance matrix
-        var count = path.Count;
+        var count = request.path.Count;
         var matrix = new long[count, count];
 
         for (var i = 0; i < count; i++)
         {
             for (var j = i; j < count; j++)
             {
-                var distance = (long)(path[i].GetDistanceTo(path[j]) * SCALE);
+                var distance = (long)(request.path[i].GetDistanceTo(request.path[j]) * SCALE);
                 matrix[i, j] = distance;
                 matrix[j, i] = distance;
             }
@@ -47,18 +56,20 @@ public class PathOptimizerService : IPathOptimizerService
         // get soulution
         var solution = routing.SolveWithParameters(searchParameters);
 
-        var result = new List<GeoCoordinate>();
+        var finalPath = new List<GeoCoordinate>();
 
-        long routeDistance = 0;
+        long routeDistance = 0; //TODO use it somewhere
         var index = routing.Start(0);
         while (routing.IsEnd(index) == false)
         {
-            result.Add(path[manager.IndexToNode((int)index)]);
+            finalPath.Add(request.path[manager.IndexToNode((int)index)]);
             var previousIndex = index;
             index = solution.Value(routing.NextVar(index));
             routeDistance += routing.GetArcCostForVehicle(previousIndex, index, 0);
         }
 
-        return result;
+        var result = Result.Ok((IList<GeoCoordinate>)finalPath);
+
+        return Task.FromResult(result);
     }
 }

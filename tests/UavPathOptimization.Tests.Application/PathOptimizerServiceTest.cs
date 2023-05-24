@@ -1,34 +1,36 @@
 using GeoCoordinatePortable;
-using UavPathOptimization.Application.Services;
+using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 
 namespace UavPathOptimization.Tests.Application;
 
 [TestClass]
-public class PathOptimizerServiceTest
+public class OptimizePathQueryTests
 {
     [TestMethod]
-    public void OptimizePath_Test4Nodes()
+    public async Task OptimizePath_Test4Nodes()
     {
         var expected = new List<GeoCoordinate>
         {
-            new (50.021208, 36.343257), //1
-            new (50.021129, 36.340071), //2
-            new (50.018267, 36.342377), //3
-            new (50.016099, 36.342343), //4
+            new(50.021208, 36.343257), //1
+            new(50.021129, 36.340071), //2
+            new(50.018267, 36.342377), //3
+            new(50.016099, 36.342343) //4
         };
 
         var path = new List<GeoCoordinate>
         {
-            new (50.021208, 36.343257), //1
-            new (50.016099, 36.342343), //4
-            new (50.021129, 36.340071), //2
-            new (50.018267, 36.342377), //3
+            new(50.021208, 36.343257), //1
+            new(50.016099, 36.342343), //4
+            new(50.021129, 36.340071), //2
+            new(50.018267, 36.342377) //3
         };
 
-        var service = new PathOptimizerService();
-        var actual = service.OptimizePath(path).ToList();
+        var query = new OptimizePathQuery(path);
+        var handler = new OptimizePathHandler();
+
+        var result = await handler.Handle(query, CancellationToken.None);
 
         // assert
-        CollectionAssert.AreEqual(expected, actual);
+        CollectionAssert.AreEqual(expected, result.ToList());
     }
 }

@@ -1,6 +1,6 @@
-﻿using GeoCoordinatePortable;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UavPathOptimization.Application.Services;
+using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 using UavPathOptimization.WebAPI.DTO;
 
 namespace UavPathOptimization.WebAPI.Controllers;
@@ -9,30 +9,31 @@ namespace UavPathOptimization.WebAPI.Controllers;
 [Route("api/optimizePath")]
 public class PathOptimizerController : ControllerBase
 {
-    private readonly IPathOptimizerService _pathOptimizerService;
+    private readonly IMediator _mediator;
 
-    public PathOptimizerController(IPathOptimizerService pathOptimizerService)
+    public PathOptimizerController(IMediator mediator)
     {
-        _pathOptimizerService = pathOptimizerService;
+        _mediator = mediator;
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] IList<GeoCoordinateDto> path)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<GeoCoordinateDto>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Post([FromBody] IList<GeoCoordinateDto> path)
     {
-        if (path == null || path.Count < 2)
-        {
-            return BadRequest("Invalid input. Path must contain at least 2 GeoCoordinate objects.");
-        }
-
         var mapper = new GeoCoordinateMapper();
         var newPath = path
             .Select(x => mapper.GeoCoordinateDtoToGeoCoordinate(x))
             .ToList();
 
-        var result = _pathOptimizerService
-            .OptimizePath(newPath)
-            .Select(x => mapper.GeoCoordinateToGeoCoordinateDto(x));
+        var command = new OptimizePathQuery(newPath);
+        var result = await _mediator.Send(command);
 
-        return Ok(result);
+        if (result.IsFailed)
+        {
+            return BadRequest(result.Errors.First().Message);
+        }
+
+        return Ok(result.Value.Select(x => mapper.GeoCoordinateToGeoCoordinateDto(x)));
     }
 }

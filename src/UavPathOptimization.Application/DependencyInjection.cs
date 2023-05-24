@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using UavPathOptimization.Application.Services;
 
 namespace UavPathOptimization.Application;
 
@@ -10,9 +9,8 @@ public static class DependencyInjection
     {
         var assembly = typeof(DependencyInjection).Assembly;
 
-        // services.AddMediatR(configuration =>
-        //     configuration.RegisterServicesFromAssembly(assembly));
-        services.AddScoped<IPathOptimizerService, PathOptimizerService>();
+        services.AddMediatR(configuration =>
+            configuration.RegisterServicesFromAssembly(assembly));
 
         services.AddValidatorsFromAssembly(assembly);
 
