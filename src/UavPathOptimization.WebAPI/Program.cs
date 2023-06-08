@@ -1,5 +1,6 @@
 using UavPathOptimization.Application;
 using UavPathOptimization.Infrastructure;
+using UavPathOptimization.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure();
+    .AddInfrastructure()
+    .AddWebApi();
 
 var app = builder.Build();
 

@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 using UavPathOptimization.WebAPI.DTO;
+using UavPathOptimization.WebAPI.Extensions;
 
 namespace UavPathOptimization.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/optimizePath")]
-public class PathOptimizerController : ControllerBase
+public class PathOptimizerController : ApiController
 {
     private readonly IMediator _mediator;
 
@@ -29,11 +30,9 @@ public class PathOptimizerController : ControllerBase
         var command = new OptimizePathQuery(newPath);
         var result = await _mediator.Send(command);
 
-        if (result.IsFailed)
-        {
-            return BadRequest(result.Errors.First().Message);
-        }
-
-        return Ok(result.Value.Select(x => mapper.GeoCoordinateToGeoCoordinateDto(x)));
+        return result.Match(
+            result => Ok(result.Select(x => mapper.GeoCoordinateToGeoCoordinateDto(x))),
+                errors => Problem(errors)
+        );
     }
 }

@@ -1,21 +1,22 @@
-﻿using FluentResults;
+﻿using ErrorOr;
 using GeoCoordinatePortable;
 using Google.OrTools.ConstraintSolver;
 using MediatR;
+using UavPathOptimization.Domain.Common.Errors;
 
 namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 
 public class OptimizePathHandler :
-    IRequestHandler<OptimizePathQuery, Result<IList<GeoCoordinate>>>
+    IRequestHandler<OptimizePathQuery, ErrorOr<IList<GeoCoordinate>>>
 {
     private const int SCALE = 100;
 
-    public Task<Result<IList<GeoCoordinate>>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
+    public Task<ErrorOr<IList<GeoCoordinate>>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
     {
         if (request.path.Count < 2)
         {
-            var error = Result.Fail(new Error("Path must include more than 2 GeoCoordinate."));
-            return Task.FromResult<Result<IList<GeoCoordinate>>>(error);
+            return Task.FromResult<ErrorOr<IList<GeoCoordinate>>>(
+                Errors.OptimizePath.InputPathValidationError);
         }
 
         // create distance matrix
@@ -68,8 +69,6 @@ public class OptimizePathHandler :
             routeDistance += routing.GetArcCostForVehicle(previousIndex, index, 0);
         }
 
-        var result = Result.Ok((IList<GeoCoordinate>)finalPath);
-
-        return Task.FromResult(result);
+        return Task.FromResult<ErrorOr<IList<GeoCoordinate>>>(finalPath);
     }
 }
