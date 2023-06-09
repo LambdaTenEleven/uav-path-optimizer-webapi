@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Services;
 using UavPathOptimization.Infrastructure.Authentication;
@@ -8,10 +9,13 @@ namespace UavPathOptimization.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+        ConfigurationManager builderConfiguration)
     {
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+        services.Configure<JwtSettings>(builderConfiguration.GetSection(JwtSettings.SectionName));
 
         return services;
     }

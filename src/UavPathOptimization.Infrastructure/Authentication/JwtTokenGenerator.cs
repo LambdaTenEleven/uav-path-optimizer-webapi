@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Services;
@@ -12,16 +13,17 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly IDateTimeProvider _dateTimeProvider;
 
-    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider)
+    private readonly JwtSettings _jwtSettings;
+    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtOptions)
     {
         _dateTimeProvider = dateTimeProvider;
+        _jwtSettings = jwtOptions.Value;
     }
 
     public string GenerateToken(Guid userId, string firstName, string lastName, string email)
     {
-        // TODO: move secrets to configuration
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super-secret-key-123456780000-secret-key")),
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey)),
             SecurityAlgorithms.HmacSha256
         );
 
@@ -34,11 +36,12 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        //TODO: move expiration time to configuration
         var token = new JwtSecurityToken(
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
             claims: claims,
             signingCredentials: signingCredentials,
-            expires: _dateTimeProvider.UtcNow.AddHours(1)
+            expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpirationTimeInMinutes)
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
