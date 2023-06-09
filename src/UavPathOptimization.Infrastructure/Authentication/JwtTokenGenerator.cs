@@ -3,11 +3,20 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using UavPathOptimization.Application.Common.Authentication;
+using UavPathOptimization.Application.Common.Services;
+using UavPathOptimization.Infrastructure.Services;
 
 namespace UavPathOptimization.Infrastructure.Authentication;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
+
+    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider)
+    {
+        _dateTimeProvider = dateTimeProvider;
+    }
+
     public string GenerateToken(Guid userId, string firstName, string lastName, string email)
     {
         // TODO: move secrets to configuration
@@ -26,11 +35,10 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         };
 
         //TODO: move expiration time to configuration
-        //TODO: inject DateTimeProvider
         var token = new JwtSecurityToken(
             claims: claims,
             signingCredentials: signingCredentials,
-            expires: DateTime.UtcNow.AddDays(7)
+            expires: _dateTimeProvider.UtcNow.AddHours(1)
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
