@@ -30,7 +30,12 @@ public class OptimizePathQueryTests
 
         var result = await handler.Handle(query, CancellationToken.None);
 
+        if (result.IsError)
+        {
+            Assert.Fail($"Results failed: {result.FirstError.Description}");
+        }
+
         // assert
-        CollectionAssert.AreEqual(expected, result.ToList());
+        CollectionAssert.AreEqual(expected, result.Value.ToList());
     }
 }

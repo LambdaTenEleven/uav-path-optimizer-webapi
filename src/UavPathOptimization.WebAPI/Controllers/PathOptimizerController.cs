@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 using UavPathOptimization.WebAPI.DTO;
-using UavPathOptimization.WebAPI.Extensions;
 
 namespace UavPathOptimization.WebAPI.Controllers;
 
