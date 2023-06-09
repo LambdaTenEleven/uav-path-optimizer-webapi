@@ -3,8 +3,6 @@
 
 .idea/
 .vs/
-src/UavPathOptimization.WebAPI/appsettings.json
-src/UavPathOptimization.WebAPI/appsettings.Development.json
 
 # User-specific files
 *.suo
