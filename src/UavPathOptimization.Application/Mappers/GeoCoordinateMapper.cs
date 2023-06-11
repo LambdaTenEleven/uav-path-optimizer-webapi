@@ -1,9 +1,8 @@
 ﻿using GeoCoordinatePortable;
 using Riok.Mapperly.Abstractions;
+using UavPathOptimization.Domain.Contracts;
 
-namespace UavPathOptimization.WebAPI.DTO;
-
-public record GeoCoordinateDto(double Latitude, double Longitude);
+namespace UavPathOptimization.Application.Mappers;
 
 [Mapper]
 public partial class GeoCoordinateMapper
