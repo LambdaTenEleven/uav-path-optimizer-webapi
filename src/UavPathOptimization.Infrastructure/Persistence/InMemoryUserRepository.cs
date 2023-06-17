@@ -1,7 +1,7 @@
-﻿using UavPathOptimization.Application.Common.Persistance;
+﻿using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Domain.Entities;
 
-namespace UavPathOptimization.Infrastructure.Persistance;
+namespace UavPathOptimization.Infrastructure.Persistence;
 
 public class InMemoryUserRepository : IUserRepository
 {

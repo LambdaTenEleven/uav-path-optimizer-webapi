@@ -5,7 +5,7 @@ using UavPathOptimization.Domain.Contracts;
 namespace UavPathOptimization.Application.Mappers;
 
 [Mapper]
-public partial class GeoCoordinateMapper
+internal partial class GeoCoordinateMapper
 {
     public partial GeoCoordinateDto GeoCoordinateToGeoCoordinateDto(GeoCoordinate geoCoordinate);
 

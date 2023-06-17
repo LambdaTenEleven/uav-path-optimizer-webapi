@@ -20,15 +20,17 @@ public class AuthenticationController : ApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+        var command = new RegisterCommand(
+            request.UserName,
+            request.Email,
+            request.Password
+        );
+
         var result = await _mediator.Send(command);
 
         return result.Match(
             result => Ok(new AuthenticationResponse(
                     result.Id,
-                    result.FirstName,
-                    result.LastName,
-                    result.Email,
                     result.Token
                 )),
             errors => Problem(errors)

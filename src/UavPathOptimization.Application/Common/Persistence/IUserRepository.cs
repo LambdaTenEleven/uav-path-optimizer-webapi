@@ -1,6 +1,6 @@
 ﻿using UavPathOptimization.Domain.Entities;
 
-namespace UavPathOptimization.Application.Common.Persistance;
+namespace UavPathOptimization.Application.Common.Persistence;
 
 public interface IUserRepository
 {

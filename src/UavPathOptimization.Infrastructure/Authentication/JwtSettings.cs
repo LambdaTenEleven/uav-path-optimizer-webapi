@@ -1,6 +1,6 @@
 ﻿namespace UavPathOptimization.Infrastructure.Authentication;
 
-public class JwtSettings
+internal class JwtSettings
 {
     public const string SectionName = "JwtSettings";
     public string SecretKey { get; init; } = null!;
