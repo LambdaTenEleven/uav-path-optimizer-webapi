@@ -7,7 +7,7 @@ using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Contracts;
 using UavPathOptimization.Domain.Entities;
 
-namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
+namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
 
 public class OptimizePathHandler :
     IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>

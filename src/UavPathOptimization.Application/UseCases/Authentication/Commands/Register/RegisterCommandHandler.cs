@@ -1,11 +1,10 @@
 ﻿using ErrorOr;
 using MediatR;
 using UavPathOptimization.Application.Common.Authentication;
-using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Domain.Entities;
 
-namespace UavPathOptimization.Application.UseCases.Authentication.Commands;
+namespace UavPathOptimization.Application.UseCases.Authentication.Commands.Register;
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
 {

@@ -2,7 +2,7 @@
 using MediatR;
 using UavPathOptimization.Domain.Entities;
 
-namespace UavPathOptimization.Application.UseCases.Authentication.Queries;
+namespace UavPathOptimization.Application.UseCases.Authentication.Queries.Login;
 
 public record LoginQuery(
     string Email,

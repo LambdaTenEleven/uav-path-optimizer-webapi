@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
+using UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
 using UavPathOptimization.Domain.Contracts;
 using UavPathOptimization.Domain.Contracts.OptimizePath;
 

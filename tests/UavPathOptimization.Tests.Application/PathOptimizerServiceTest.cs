@@ -1,5 +1,6 @@
 using GeoCoordinatePortable;
 using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
+using UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
 
 namespace UavPathOptimization.Tests.Application;
 

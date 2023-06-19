@@ -1,12 +1,11 @@
 ﻿using ErrorOr;
 using MediatR;
 using UavPathOptimization.Application.Common.Authentication;
-using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities;
 
-namespace UavPathOptimization.Application.UseCases.Authentication.Queries;
+namespace UavPathOptimization.Application.UseCases.Authentication.Queries.Login;
 
 public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
 {
