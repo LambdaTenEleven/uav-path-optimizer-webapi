@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 using UavPathOptimization.Domain.Contracts;
@@ -7,6 +8,7 @@ using UavPathOptimization.Domain.Contracts.OptimizePath;
 namespace UavPathOptimization.WebAPI.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/optimizePath")]
 public class PathOptimizerController : ApiController
 {
