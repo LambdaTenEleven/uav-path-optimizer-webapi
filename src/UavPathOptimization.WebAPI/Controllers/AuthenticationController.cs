@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.Authentication.Commands;
 using UavPathOptimization.Domain.Contracts.Authentication;
@@ -10,9 +11,12 @@ public class AuthenticationController : ApiController
 {
     private readonly IMediator _mediator;
 
-    public AuthenticationController(IMediator mediator)
+    private readonly IMapper _mapper;
+
+    public AuthenticationController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     [HttpPost("register")]
@@ -20,19 +24,12 @@ public class AuthenticationController : ApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var command = new RegisterCommand(
-            request.UserName,
-            request.Email,
-            request.Password
-        );
+        var command = _mapper.Map<RegisterCommand>(request);
 
-        var result = await _mediator.Send(command);
+        var registerResult = await _mediator.Send(command);
 
-        return result.Match(
-            result => Ok(new AuthenticationResponse(
-                    result.Id,
-                    result.Token
-                )),
+        return registerResult.Match(
+            result => Ok(_mapper.Map<AuthenticationResponse>(result)),
             errors => Problem(errors)
         );
     }

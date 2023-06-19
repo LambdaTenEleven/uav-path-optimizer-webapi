@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using UavPathOptimization.Domain.Contracts.Authentication;
+using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Commands;
 
@@ -8,4 +8,4 @@ public record RegisterCommand(
     string UserName,
     string Email,
     string Password
-) : IRequest<ErrorOr<AuthenticationResponse>>;
+) : IRequest<ErrorOr<AuthenticationResult>>;

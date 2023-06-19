@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UavPathOptimization.Application.Common.Authentication;
@@ -30,6 +32,21 @@ public static class DependencyInjection
         services.AddTransient<IUserRepository, InMemoryUserRepository>();
 
         services.Configure<JwtSettings>(builderConfiguration.GetSection(JwtSettings.SectionName));
+
+        services.AddIdentityCore<InfrastructureUser>(options =>
+            {
+                // Configure Identity options
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+            })
+            .AddRoles<IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddUserStore<UserStore<InfrastructureUser, IdentityRole<Guid>, ApplicationDbContext, Guid>>()
+            .AddRoleStore<RoleStore<IdentityRole<Guid>, ApplicationDbContext, Guid>>()
+            .AddUserManager<UserManager<InfrastructureUser>>();
 
         return services;
     }

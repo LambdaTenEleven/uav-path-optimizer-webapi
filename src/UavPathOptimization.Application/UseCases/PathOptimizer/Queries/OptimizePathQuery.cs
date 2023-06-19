@@ -1,9 +1,9 @@
 ﻿using ErrorOr;
 using MediatR;
 using UavPathOptimization.Domain.Contracts;
-using UavPathOptimization.Domain.Contracts.OptimizePath;
+using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 
 public record OptimizePathQuery(IList<GeoCoordinateDto> path)
-    : IRequest<ErrorOr<OptimizePathResponse>>;
+    : IRequest<ErrorOr<OptimizePathResult>>;

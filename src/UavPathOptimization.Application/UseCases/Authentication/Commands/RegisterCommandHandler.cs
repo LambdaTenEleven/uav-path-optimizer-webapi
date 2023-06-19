@@ -2,13 +2,11 @@
 using MediatR;
 using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Persistence;
-using UavPathOptimization.Domain.Common.Errors;
-using UavPathOptimization.Domain.Contracts.Authentication;
 using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Commands;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResponse>>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
 {
     private readonly IJwtTokenGenerator _tokenGenerator;
 
@@ -20,34 +18,32 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
         _mediator = mediator;
     }
 
-    public Task<ErrorOr<AuthenticationResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         // 1. Validate fields
-
-        // 2. Check if user already exists
-        // if (_userRepository.GetUserByEmail(request.Email) != null)
-        // {
-        //     return Task.FromResult<ErrorOr<AuthenticationResponse>>(Errors.Authenticate.UserAlreadyExists);
-        // }
-
-        // 3. Create user
+        // TODO: Validate fields
+        // 2. Create user
         var user = new User()
         {
             UserName = request.UserName,
-            Email = request.Email,
-            PasswordHash = request.Password // TODO: Hash password
+            Email = request.Email
         };
 
-        var result = _mediator.Send(new AddUserCommand(user), cancellationToken);
+        // 3. Add user to database using AddUserCommand that uses UserManager
+        var result = await _mediator.Send(new AddUserCommand(user, request.Password), cancellationToken);
+        if (result.IsError)
+        {
+            return result.Errors;
+        }
 
         // 4. Generate token
         var token = _tokenGenerator.GenerateToken(user);
 
-        var response = new AuthenticationResponse(
-            user.Id,
+        var authenticationResult = new AuthenticationResult(
+            user,
             token
         );
 
-        return Task.FromResult<ErrorOr<AuthenticationResponse>>(response);
+        return authenticationResult;
     }
 }

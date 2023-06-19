@@ -1,27 +1,34 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MapsterMapper;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 using UavPathOptimization.Application.Common.Persistence;
-using UavPathOptimization.Infrastructure.Mappers;
+using UavPathOptimization.Infrastructure.Common;
 using UavPathOptimization.Infrastructure.Persistence.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence;
 
-public class AddUserCommandHandler : IRequestHandler<AddUserCommand, Unit>
+public class AddUserCommandHandler : IRequestHandler<AddUserCommand, ErrorOr<Guid>>
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly UserManager<InfrastructureUser> _userManager;
 
-    public AddUserCommandHandler(ApplicationDbContext dbContext)
+    private readonly IMapper _mapper;
+    public AddUserCommandHandler(UserManager<InfrastructureUser> userManager, IMapper mapper)
     {
-        _dbContext = dbContext;
+        _userManager = userManager;
+        _mapper = mapper;
     }
 
-    public Task<Unit> Handle(AddUserCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Guid>> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        var mapper = new UserMapper();
-        var infrastructureUser = mapper.UserToInfrastructureUser(request.User);
+        var infrastructureUser = _mapper.Map<InfrastructureUser>(request.User);
 
-        _dbContext.Users.Add(infrastructureUser);
-        _dbContext.SaveChanges();
+        var result = await _userManager.CreateAsync(infrastructureUser, request.Password);
+        if (!result.Succeeded)
+        {
+            return result.Errors.Select(IdentityErrorConverter.Convert).ToList();
+        }
 
-        return Unit.Task;
+        return infrastructureUser.Id;
     }
 }

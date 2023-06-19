@@ -1,29 +1,36 @@
 ﻿using ErrorOr;
 using GeoCoordinatePortable;
 using Google.OrTools.ConstraintSolver;
+using MapsterMapper;
 using MediatR;
-using UavPathOptimization.Application.Mappers;
 using UavPathOptimization.Domain.Common.Errors;
-using UavPathOptimization.Domain.Contracts.OptimizePath;
+using UavPathOptimization.Domain.Contracts;
+using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
 
 public class OptimizePathHandler :
-    IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResponse>>
+    IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
 {
+    private readonly IMapper _mapper;
+
+    public OptimizePathHandler(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
     private const int SCALE = 100;
 
-    public Task<ErrorOr<OptimizePathResponse>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
+    public Task<ErrorOr<OptimizePathResult>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
     {
         if (request.path.Count < 2)
         {
-            return Task.FromResult<ErrorOr<OptimizePathResponse>>(
+            return Task.FromResult<ErrorOr<OptimizePathResult>>(
                 Errors.OptimizePath.InputPathValidationError);
         }
 
         // map path to GeoCoordinate
-        var mapper = new GeoCoordinateMapper();
-        var path = request.path.Select(x => mapper.GeoCoordinateDtoToGeoCoordinate(x)).ToList();
+        var path = request.path.Select(x => _mapper.Map<GeoCoordinate>(x)).ToList();
 
         // create distance matrix
         var count = request.path.Count;
@@ -75,11 +82,11 @@ public class OptimizePathHandler :
             routeDistance += routing.GetArcCostForVehicle(previousIndex, index, 0);
         }
 
-        var result = new OptimizePathResponse(
-            finalPath.Select(x => mapper.GeoCoordinateToGeoCoordinateDto(x)).ToList(),
+        var result = new OptimizePathResult(
+            finalPath.Select(x => _mapper.Map<GeoCoordinateDto>(x)).ToList(),
             routeDistance / SCALE
         );
 
-        return Task.FromResult<ErrorOr<OptimizePathResponse>>(result);
+        return Task.FromResult<ErrorOr<OptimizePathResult>>(result);
     }
 }
