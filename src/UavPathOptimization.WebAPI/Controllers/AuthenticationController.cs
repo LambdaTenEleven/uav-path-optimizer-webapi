@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.Authentication.Commands;
+using UavPathOptimization.Application.UseCases.Authentication.Queries;
 using UavPathOptimization.Domain.Contracts.Authentication;
 
 namespace UavPathOptimization.WebAPI.Controllers;
@@ -34,17 +35,17 @@ public class AuthenticationController : ApiController
         );
     }
 
-    // [HttpPost("login")]
-    // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticationResponse))]
-    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // public async Task<IActionResult> Login([FromBody] LoginRequest request)
-    // {
-    //     var command = new LoginCommand(request.Email, request.Password);
-    //     var result = await _mediator.Send(command);
-    //
-    //     return result.Match(
-    //         result => Ok(new LoginResponse(result)),
-    //         errors => Problem(errors)
-    //     );
-    // }
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticationResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        var command = new LoginQuery(request.Email, request.Password);
+        var loginResult = await _mediator.Send(command);
+
+        return loginResult.Match(
+            result => Ok(_mapper.Map<AuthenticationResponse>(result)),
+            errors => Problem(errors)
+        );
+    }
 }

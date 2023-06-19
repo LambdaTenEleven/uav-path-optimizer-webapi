@@ -4,7 +4,7 @@ namespace UavPathOptimization.Domain.Common.Errors;
 
 public static partial class Errors
 {
-    public static class Authenticate
+    public static class Register
     {
         public static Error DefaultError = Error.Failure(
             code: "Authenticate.DefaultError",

@@ -6,7 +6,7 @@ using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Infrastructure.Common;
 using UavPathOptimization.Infrastructure.Persistence.EntityFramework;
 
-namespace UavPathOptimization.Infrastructure.Persistence;
+namespace UavPathOptimization.Infrastructure.Persistence.Authentication;
 
 public class AddUserCommandHandler : IRequestHandler<AddUserCommand, ErrorOr<Guid>>
 {
