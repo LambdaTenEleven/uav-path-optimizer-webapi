@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Application.Common.Services;
+using UavPathOptimization.Domain.Common;
 using UavPathOptimization.Infrastructure.Authentication;
 using UavPathOptimization.Infrastructure.Persistence;
 using UavPathOptimization.Infrastructure.Persistence.EntityFramework;

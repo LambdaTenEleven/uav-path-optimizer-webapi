@@ -24,7 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Mappers\" />
       <Folder Include="Migrations\" />
     </ItemGroup>
 

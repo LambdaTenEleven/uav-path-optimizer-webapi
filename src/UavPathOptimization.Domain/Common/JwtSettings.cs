@@ -1,4 +1,4 @@
-﻿namespace UavPathOptimization.Infrastructure.Authentication;
+﻿namespace UavPathOptimization.Domain.Common;
 
 public class JwtSettings
 {

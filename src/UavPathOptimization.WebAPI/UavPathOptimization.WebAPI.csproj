@@ -21,9 +21,4 @@
       <ProjectReference Include="..\UavPathOptimization.Infrastructure\UavPathOptimization.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Common\Errors\" />
-      <Folder Include="Filters\" />
-    </ItemGroup>
-
 </Project>

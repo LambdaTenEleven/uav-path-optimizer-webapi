@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using UavPathOptimization.Application.Common.Persistence;
+using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Infrastructure.Persistence.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Authentication;

@@ -2,6 +2,7 @@
 using MediatR;
 using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Persistence;
+using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities;
 
