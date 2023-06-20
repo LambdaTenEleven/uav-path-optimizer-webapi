@@ -23,17 +23,17 @@ public class OptimizePathHandler :
 
     public Task<ErrorOr<OptimizePathResult>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
     {
-        if (request.path.Count < 2)
+        if (request.Path.Count < 2)
         {
             return Task.FromResult<ErrorOr<OptimizePathResult>>(
                 Errors.OptimizePath.InputPathValidationError);
         }
 
         // map path to GeoCoordinate
-        var path = request.path.Select(x => _mapper.Map<GeoCoordinate>(x)).ToList();
+        var path = request.Path.Select(x => _mapper.Map<GeoCoordinate>(x)).ToList();
 
         // create distance matrix
-        var count = request.path.Count;
+        var count = request.Path.Count;
         var matrix = new long[count, count];
 
         for (var i = 0; i < count; i++)

@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\UavPathOptimization.Application\UavPathOptimization.Application.csproj" />
+      <ProjectReference Include="..\..\src\UavPathOptimization.Infrastructure\UavPathOptimization.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

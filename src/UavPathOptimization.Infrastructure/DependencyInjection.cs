@@ -11,6 +11,7 @@ using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Application.Common.Services;
 using UavPathOptimization.Domain.Common;
+using UavPathOptimization.Domain.Common.Settings;
 using UavPathOptimization.Infrastructure.Authentication;
 using UavPathOptimization.Infrastructure.Persistence;
 using UavPathOptimization.Infrastructure.Persistence.EntityFramework;
@@ -36,14 +37,18 @@ public static class DependencyInjection
 
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
+        // password settings
+        var passwordSettings = new PasswordSettings();
+        builderConfiguration.Bind(PasswordSettings.SectionName, passwordSettings);
+
         services.AddIdentityCore<InfrastructureUser>(options =>
         {
             // Configure Identity options
-            options.Password.RequireDigit = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequiredLength = 6;
+            options.Password.RequireDigit = passwordSettings.RequireDigit;
+            options.Password.RequireLowercase = passwordSettings.RequireLowercase;
+            options.Password.RequireUppercase = passwordSettings.RequireUppercase;
+            options.Password.RequireNonAlphanumeric = passwordSettings.RequireNonAlphanumeric;
+            options.Password.RequiredLength = passwordSettings.RequiredLength;
         })
             .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()

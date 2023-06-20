@@ -20,23 +20,21 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        // 1. Validate fields
-        // TODO: Validate fields
-        // 2. Create user
+        // 1. Create user
         var user = new User()
         {
             UserName = request.UserName,
             Email = request.Email
         };
 
-        // 3. Add user to database using AddUserCommand that uses UserManager
+        // 2. Add user to database using AddUserCommand that uses UserManager
         var result = await _mediator.Send(new AddUserCommand(user, request.Password), cancellationToken);
         if (result.IsError)
         {
             return result.Errors;
         }
 
-        // 4. Generate token
+        // 3. Generate token
         var token = _tokenGenerator.GenerateToken(user);
 
         var authenticationResult = new AuthenticationResult(
