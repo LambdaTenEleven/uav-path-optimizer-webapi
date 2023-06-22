@@ -10,11 +10,11 @@ using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
 
-public class OptimizePathHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
+public class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
 {
     private readonly IMapper _mapper;
 
-    public OptimizePathHandler(IMapper mapper)
+    public OptimizePathQueryHandler(IMapper mapper)
     {
         _mapper = mapper;
     }
@@ -23,11 +23,6 @@ public class OptimizePathHandler : IRequestHandler<OptimizePathQuery, ErrorOr<Op
 
     public Task<ErrorOr<OptimizePathResult>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
     {
-        if (request.Coordinates.Count < 2)
-        {
-            return Task.FromResult<ErrorOr<OptimizePathResult>>(Errors.OptimizePath.InputPathValidationError);
-        }
-
         // Map coordinates to GeoCoordinate
         var path = request.Coordinates.Select(x => new GeoCoordinate(x.Latitude, x.Longitude)).ToList();
 

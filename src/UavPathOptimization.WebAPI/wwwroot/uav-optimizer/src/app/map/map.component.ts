@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { latLng, MapOptions, tileLayer, polyline } from 'leaflet';
+import { latLng, MapOptions, tileLayer, polyline, Layer, LayerGroup } from 'leaflet';
 import { Marker, marker } from 'leaflet';
 import { icon } from 'leaflet';
 
@@ -11,10 +11,11 @@ import { icon } from 'leaflet';
 })
 export class MapComponent implements OnInit {
   mapOptions: MapOptions = {};
-  layers: (Marker | any)[] = [];
+  layers: (Marker | LayerGroup)[] = [];
   uavCount: number = 1;
   coordinates: { latitude: number; longitude: number }[] = [];
   response: any;
+  pathColors: string[] = [];
 
   constructor(private apiService: ApiService) {}
 
@@ -49,6 +50,7 @@ export class MapComponent implements OnInit {
   }
 
   optimizePath(): void {
+    this.clearPaths();
     this.apiService.optimizePath(this.uavCount, this.coordinates).subscribe(response => {
       this.response = response;
       this.drawPaths();
@@ -56,15 +58,38 @@ export class MapComponent implements OnInit {
   }
 
   drawPaths(): void {
+    const pathLayers: Layer[] = [];
     this.response.uavPaths.forEach((path: any) => {
       const latLngs = path.path.map((point: any) => [point.latitude, point.longitude]);
+      const color = getRandomColor();
+      this.pathColors.push(color);
       const polylineOptions = {
-        color: getRandomColor(),
+        color: color,
         weight: 8
       };
       const polylineLayer = polyline(latLngs, polylineOptions);
-      this.layers.push(polylineLayer);
+      pathLayers.push(polylineLayer);
     });
+    const pathsLayerGroup = new LayerGroup(pathLayers);
+    this.layers.push(pathsLayerGroup);
+  }
+
+  clearPaths(): void {
+    // Filter out the path layers from the layers array
+    this.pathColors = [];
+    this.layers = this.layers.filter(layer => !(layer instanceof LayerGroup));
+  }
+
+  getPathColor(path: any): string {
+    const index = this.response.uavPaths.indexOf(path);
+    return this.pathColors[index];
+  }
+
+  clearMap(): void {
+    this.pathColors = [];
+    this.layers = [];
+    this.coordinates = [];
+    this.response = null;
   }
 }
 
