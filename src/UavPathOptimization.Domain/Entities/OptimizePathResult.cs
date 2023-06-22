@@ -1,5 +1,8 @@
 ﻿using UavPathOptimization.Domain.Contracts;
+using UavPathOptimization.Domain.Contracts.OptimizePath;
 
 namespace UavPathOptimization.Domain.Entities;
 
-public record OptimizePathResult(IList<GeoCoordinateDto> Path, double Distance);
+public record OptimizePathResult(
+    IList<UAVPath> UavPaths
+);

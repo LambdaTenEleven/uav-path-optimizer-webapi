@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.PathOptimizer.Queries;
@@ -9,27 +10,30 @@ using UavPathOptimization.Domain.Contracts.OptimizePath;
 namespace UavPathOptimization.WebAPI.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/optimizePath")]
 public class PathOptimizerController : ApiController
 {
     private readonly IMediator _mediator;
 
-    public PathOptimizerController(IMediator mediator)
+    private readonly IMapper _mapper;
+
+    public PathOptimizerController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OptimizePathResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Post([FromBody] IList<GeoCoordinateDto> path)
+    public async Task<IActionResult> Post([FromBody] OptimizePathRequest request)
     {
-        var command = new OptimizePathQuery(path);
-        var result = await _mediator.Send(command);
+        //var query = _mapper.Map<OptimizePathQuery>(request);
+        var query = new OptimizePathQuery(request.UAVCount, request.Coordinates);
+        var result = await _mediator.Send(query);
 
         return result.Match(
-            result => Ok(result),
+            ok => Ok(new OptimizePathResponse(ok.UavPaths)),
                 errors => Problem(errors)
         );
     }

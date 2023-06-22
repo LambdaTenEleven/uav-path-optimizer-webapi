@@ -10,5 +10,10 @@ public static partial class Errors
             code: "OptimizePath.InputPathValidationError",
             description: "Path must include more than 2 GeoCoordinate."
         );
+
+        public static Error SolutionError = Error.Validation(
+            code: "OptimizePath.SolutionError",
+            description: "Solution error."
+        );
     }
 }

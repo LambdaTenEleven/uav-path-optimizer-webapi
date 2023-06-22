@@ -5,12 +5,12 @@ using MapsterMapper;
 using MediatR;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Contracts;
+using UavPathOptimization.Domain.Contracts.OptimizePath;
 using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
 
-public class OptimizePathHandler :
-    IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
+public class OptimizePathHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
 {
     private readonly IMapper _mapper;
 
@@ -23,17 +23,16 @@ public class OptimizePathHandler :
 
     public Task<ErrorOr<OptimizePathResult>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
     {
-        if (request.Path.Count < 2)
+        if (request.Coordinates.Count < 2)
         {
-            return Task.FromResult<ErrorOr<OptimizePathResult>>(
-                Errors.OptimizePath.InputPathValidationError);
+            return Task.FromResult<ErrorOr<OptimizePathResult>>(Errors.OptimizePath.InputPathValidationError);
         }
 
-        // map path to GeoCoordinate
-        var path = request.Path.Select(x => _mapper.Map<GeoCoordinate>(x)).ToList();
+        // Map coordinates to GeoCoordinate
+        var path = request.Coordinates.Select(x => new GeoCoordinate(x.Latitude, x.Longitude)).ToList();
 
-        // create distance matrix
-        var count = request.Path.Count;
+        // Create distance matrix
+        var count = request.Coordinates.Count;
         var matrix = new long[count, count];
 
         for (var i = 0; i < count; i++)
@@ -46,12 +45,15 @@ public class OptimizePathHandler :
             }
         }
 
-        // routing model
-        var manager = new RoutingIndexManager(matrix.GetLength(0), 1, 0);
+        // Create Routing Index Manager
+        var manager =
+            new RoutingIndexManager(matrix.GetLength(0), request.UAVCount, 0);
+
+        // Create Routing Model.
         var routing = new RoutingModel(manager);
 
-        // distance callback
-        var transitCallbackIndex = routing.RegisterTransitCallback((long fromIndex, long toIndex) =>
+        // Create and register a transit callback.
+        int transitCallbackIndex = routing.RegisterTransitCallback((long fromIndex, long toIndex) =>
            {
                // Convert from routing variable Index to
                // distance matrix NodeIndex.
@@ -60,32 +62,50 @@ public class OptimizePathHandler :
                return matrix[fromNode, toNode];
            });
 
-        // set cost of travel
+        // Define cost of each arc.
         routing.SetArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
 
-        // set search parameters
-        var searchParameters = operations_research_constraint_solver.DefaultRoutingSearchParameters();
+        // Add Distance constraint.
+        routing.AddDimension(transitCallbackIndex, 0, 30000000, //TODO figure out the exact value for this
+                             true, // start cumul to zero
+                             "Distance");
+        RoutingDimension distanceDimension = routing.GetMutableDimension("Distance");
+        distanceDimension.SetGlobalSpanCostCoefficient(100000);
+
+        // Setting first solution heuristic.
+        RoutingSearchParameters searchParameters =
+            operations_research_constraint_solver.DefaultRoutingSearchParameters();
         searchParameters.FirstSolutionStrategy = FirstSolutionStrategy.Types.Value.PathCheapestArc;
 
-        // get soulution
+        // Solve the problem.
         var solution = routing.SolveWithParameters(searchParameters);
-
-        var finalPath = new List<GeoCoordinate>();
-
-        long routeDistance = 0;
-        var index = routing.Start(0);
-        while (routing.IsEnd(index) == false)
+        if (solution is null)
         {
-            finalPath.Add(path[manager.IndexToNode((int)index)]);
-            var previousIndex = index;
-            index = solution.Value(routing.NextVar(index));
-            routeDistance += routing.GetArcCostForVehicle(previousIndex, index, 0);
+            return Task.FromResult<ErrorOr<OptimizePathResult>>(Errors.OptimizePath.SolutionError);
         }
 
-        var result = new OptimizePathResult(
-            finalPath.Select(x => _mapper.Map<GeoCoordinateDto>(x)).ToList(),
-            routeDistance / SCALE
-        );
+        var uavPaths = new List<UAVPath>();
+
+        for (int i = 0; i < request.UAVCount; ++i)
+        {
+            long routeDistance = 0;
+            var index = routing.Start(i);
+
+            var uavPath = new UAVPath();
+            while (routing.IsEnd(index) == false)
+            {
+                uavPath.Path.Add(request.Coordinates[manager.IndexToNode((int)index)]);
+                var previousIndex = index;
+                index = solution.Value(routing.NextVar(index));
+                routeDistance += routing.GetArcCostForVehicle(previousIndex, index, i);
+            }
+
+            uavPath.UAVId = i;
+            uavPath.Distance = (double)routeDistance / SCALE;
+            uavPaths.Add(uavPath);
+        }
+
+        var result = new OptimizePathResult(uavPaths);
 
         return Task.FromResult<ErrorOr<OptimizePathResult>>(result);
     }

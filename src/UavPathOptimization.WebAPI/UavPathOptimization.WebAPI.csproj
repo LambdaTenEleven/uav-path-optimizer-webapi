@@ -21,4 +21,8 @@
       <ProjectReference Include="..\UavPathOptimization.Infrastructure\UavPathOptimization.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
 </Project>
