@@ -16,6 +16,7 @@ export class MapComponent implements OnInit {
   coordinates: { latitude: number; longitude: number }[] = [];
   response: any;
   pathColors: string[] = [];
+  errorMessage: string = '';
 
   constructor(private apiService: ApiService) {}
 
@@ -51,10 +52,20 @@ export class MapComponent implements OnInit {
 
   optimizePath(): void {
     this.clearPaths();
-    this.apiService.optimizePath(this.uavCount, this.coordinates).subscribe(response => {
-      this.response = response;
-      this.drawPaths();
-    });
+    this.apiService.optimizePath(this.uavCount, this.coordinates).subscribe(
+      response => {
+        this.response = response;
+        this.drawPaths();
+      },
+      error => {
+        //this.errorMessage = error.error.errors;
+        for (var key in error.error.errors) {
+          this.errorMessage += error.error.errors[key] + "\n";
+        }
+        alert(this.errorMessage)
+        this.errorMessage = '';
+      }
+    );
   }
 
   drawPaths(): void {

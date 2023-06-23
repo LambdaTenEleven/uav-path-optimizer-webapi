@@ -11,7 +11,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
   ],
   imports: [
     BrowserModule,
