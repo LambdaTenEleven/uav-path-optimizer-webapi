@@ -12,6 +12,6 @@ export class ApiService {
 
   optimizePath(uavCount: number, coordinates: any[]): Observable<any> {
     const payload = { uavCount, coordinates };
-    return this.http.post<any>(`${this.baseUrl}/optimizePath`, payload);
+    return this.http.post<any>(`${this.baseUrl}/optimize_path`, payload);
   }
 }

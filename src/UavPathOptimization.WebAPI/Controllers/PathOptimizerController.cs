@@ -10,7 +10,7 @@ using UavPathOptimization.Domain.Contracts.OptimizePath;
 namespace UavPathOptimization.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/optimizePath")]
+[Route("api/optimize_path")]
 public class PathOptimizerController : ApiController
 {
     private readonly IMediator _mediator;

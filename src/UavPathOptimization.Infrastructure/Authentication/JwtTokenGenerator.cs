@@ -11,7 +11,7 @@ using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Infrastructure.Authentication;
 
-internal class JwtTokenGenerator : IJwtTokenGenerator
+public sealed class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly IDateTimeProvider _dateTimeProvider;
 
