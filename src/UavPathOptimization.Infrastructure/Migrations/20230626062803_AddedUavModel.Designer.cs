@@ -12,8 +12,8 @@ using UavPathOptimization.Infrastructure.Common.EntityFramework;
 namespace UavPathOptimization.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230616190254_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230626062803_AddedUavModel")]
+    partial class AddedUavModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,6 +154,27 @@ namespace UavPathOptimization.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("UavPathOptimization.Domain.Entities.UavModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan>("MaxFlightTime")
+                        .HasColumnType("time");
+
+                    b.Property<double>("MaxSpeed")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UavModels");
                 });
 
             modelBuilder.Entity("UavPathOptimization.Infrastructure.Persistence.EntityFramework.InfrastructureUser", b =>

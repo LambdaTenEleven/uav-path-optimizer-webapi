@@ -24,4 +24,13 @@
       <PackageReference Include="Microsoft.IdentityModel.Protocols" Version="6.21.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UseCases\Schedule\Commands\" />
+      <Folder Include="UseCases\Schedule\Queries\" />
+      <Folder Include="UseCases\Uav\Commands\DeleteUav\" />
+      <Folder Include="UseCases\Uav\Commands\UpdateUav\" />
+      <Folder Include="UseCases\Uav\Queries\GetUavPage\" />
+      <Folder Include="UseCases\Uav\Queries\GetUav\" />
+    </ItemGroup>
+
 </Project>

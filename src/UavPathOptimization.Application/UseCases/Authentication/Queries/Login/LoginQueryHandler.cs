@@ -4,6 +4,7 @@ using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities;
+using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Queries.Login;
 

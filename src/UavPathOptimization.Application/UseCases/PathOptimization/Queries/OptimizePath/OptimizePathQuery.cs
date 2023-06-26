@@ -1,9 +1,9 @@
 ﻿using ErrorOr;
 using MediatR;
 using UavPathOptimization.Domain.Contracts;
-using UavPathOptimization.Domain.Entities;
+using UavPathOptimization.Domain.Entities.Results;
 
-namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
+namespace UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 
 public record OptimizePathQuery(
     int UAVCount,

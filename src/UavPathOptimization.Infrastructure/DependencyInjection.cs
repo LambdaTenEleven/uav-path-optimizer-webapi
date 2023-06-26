@@ -13,8 +13,8 @@ using UavPathOptimization.Application.Common.Services;
 using UavPathOptimization.Domain.Common;
 using UavPathOptimization.Domain.Common.Settings;
 using UavPathOptimization.Infrastructure.Authentication;
+using UavPathOptimization.Infrastructure.Common.EntityFramework;
 using UavPathOptimization.Infrastructure.Persistence;
-using UavPathOptimization.Infrastructure.Persistence.EntityFramework;
 using UavPathOptimization.Infrastructure.Services;
 
 namespace UavPathOptimization.Infrastructure;

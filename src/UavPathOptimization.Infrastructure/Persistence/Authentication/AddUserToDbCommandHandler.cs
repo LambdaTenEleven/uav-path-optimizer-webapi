@@ -2,25 +2,24 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Infrastructure.Common;
-using UavPathOptimization.Infrastructure.Persistence.EntityFramework;
+using UavPathOptimization.Infrastructure.Common.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Authentication;
 
-public class AddUserCommandHandler : IRequestHandler<AddUserCommand, ErrorOr<Guid>>
+public class AddUserToDbCommandHandler : IRequestHandler<AddUserToDbCommand, ErrorOr<Guid>>
 {
     private readonly UserManager<InfrastructureUser> _userManager;
 
     private readonly IMapper _mapper;
-    public AddUserCommandHandler(UserManager<InfrastructureUser> userManager, IMapper mapper)
+    public AddUserToDbCommandHandler(UserManager<InfrastructureUser> userManager, IMapper mapper)
     {
         _userManager = userManager;
         _mapper = mapper;
     }
 
-    public async Task<ErrorOr<Guid>> Handle(AddUserCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Guid>> Handle(AddUserToDbCommand request, CancellationToken cancellationToken)
     {
         var infrastructureUser = _mapper.Map<InfrastructureUser>(request.User);
 

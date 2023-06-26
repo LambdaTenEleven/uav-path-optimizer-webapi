@@ -5,6 +5,7 @@ using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Application.UseCases.Authentication.Commands.Register;
 using UavPathOptimization.Domain.Entities;
+using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Tests.Application.UseCases.Authentication.Queries.Register;
 
@@ -42,7 +43,7 @@ public class RegisterCommandHandlerTests
 
         var token = "testtoken";
 
-        _mediatorMock.Setup(mock => mock.Send(It.IsAny<AddUserCommand>(), It.IsAny<CancellationToken>()))
+        _mediatorMock.Setup(mock => mock.Send(It.IsAny<AddUserToDbCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ErrorOr<Guid>());
 
         _tokenGeneratorMock

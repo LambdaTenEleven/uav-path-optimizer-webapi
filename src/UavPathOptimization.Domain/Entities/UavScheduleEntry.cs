@@ -1,0 +1,17 @@
+﻿using UavPathOptimization.Domain.Contracts;
+using UavPathOptimization.Domain.Entities.Base;
+
+namespace UavPathOptimization.Domain.Entities;
+
+public class UavScheduleEntry
+{
+    public GeoCoordinateDto Location { get; set; } = null!;
+
+    public DateTime ArrivalTime { get; set; }
+
+    public DateTime DepartureTime { get; set; }
+
+    public TimeSpan TimeSpent { get; set; }
+
+    public TimeSpan BatteryTimeLeft { get; set; }
+}

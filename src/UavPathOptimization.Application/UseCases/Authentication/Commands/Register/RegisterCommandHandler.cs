@@ -3,6 +3,7 @@ using MediatR;
 using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Persistence.User;
 using UavPathOptimization.Domain.Entities;
+using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Commands.Register;
 
@@ -28,7 +29,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
         };
 
         // 2. Add user to database using AddUserCommand that uses UserManager
-        var result = await _mediator.Send(new AddUserCommand(user, request.Password), cancellationToken);
+        var result = await _mediator.Send(new AddUserToDbCommand(user, request.Password), cancellationToken);
         if (result.IsError)
         {
             return result.Errors;

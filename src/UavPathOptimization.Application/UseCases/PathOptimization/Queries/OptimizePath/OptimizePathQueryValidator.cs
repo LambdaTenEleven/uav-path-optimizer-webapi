@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
+namespace UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 
 public class OptimizePathQueryValidator : AbstractValidator<OptimizePathQuery>
 {

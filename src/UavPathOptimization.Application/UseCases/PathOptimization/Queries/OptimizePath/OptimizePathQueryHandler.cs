@@ -4,11 +4,10 @@ using Google.OrTools.ConstraintSolver;
 using MapsterMapper;
 using MediatR;
 using UavPathOptimization.Domain.Common.Errors;
-using UavPathOptimization.Domain.Contracts;
 using UavPathOptimization.Domain.Contracts.OptimizePath;
-using UavPathOptimization.Domain.Entities;
+using UavPathOptimization.Domain.Entities.Results;
 
-namespace UavPathOptimization.Application.UseCases.PathOptimizer.Queries.OptimizePath;
+namespace UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 
 public class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
 {

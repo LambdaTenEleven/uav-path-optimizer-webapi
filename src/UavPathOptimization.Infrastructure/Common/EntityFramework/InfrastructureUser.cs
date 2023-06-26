@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace UavPathOptimization.Infrastructure.Persistence.EntityFramework;
+namespace UavPathOptimization.Infrastructure.Common.EntityFramework;
 
 public class InfrastructureUser : IdentityUser<Guid>
 {
