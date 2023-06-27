@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 
-namespace UavPathOptimization.Application.UseCases.Uav.Commands.CreateUav;
+namespace UavPathOptimization.Application.UseCases.UavModel.Commands.CreateUavModel;
 
 public record CreateUavModelCommand(
     string Name,

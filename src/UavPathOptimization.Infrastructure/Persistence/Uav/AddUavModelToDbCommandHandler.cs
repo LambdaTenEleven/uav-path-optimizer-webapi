@@ -26,7 +26,7 @@ public class AddUavModelToDbCommandHandler : IRequestHandler<AddUavModelToDbComm
         }
         catch (Exception e)
         {
-            return Errors.UavModel.UavModelNotCreated;
+            return Errors.UavModelErrors.UavModelNotCreated;
         }
     }
 }

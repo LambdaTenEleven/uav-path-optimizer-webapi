@@ -27,10 +27,9 @@
     <ItemGroup>
       <Folder Include="UseCases\Schedule\Commands\" />
       <Folder Include="UseCases\Schedule\Queries\" />
-      <Folder Include="UseCases\Uav\Commands\DeleteUav\" />
-      <Folder Include="UseCases\Uav\Commands\UpdateUav\" />
-      <Folder Include="UseCases\Uav\Queries\GetUavPage\" />
-      <Folder Include="UseCases\Uav\Queries\GetUav\" />
+      <Folder Include="UseCases\UavModel\Commands\DeleteUavModel\" />
+      <Folder Include="UseCases\UavModel\Commands\UpdateUavModel\" />
+      <Folder Include="UseCases\UavModel\Queries\GetUavModelPage\" />
     </ItemGroup>
 
 </Project>

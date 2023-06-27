@@ -2,9 +2,8 @@
 using MapsterMapper;
 using MediatR;
 using UavPathOptimization.Application.Common.Persistence.Uav;
-using UavPathOptimization.Domain.Entities;
 
-namespace UavPathOptimization.Application.UseCases.Uav.Commands.CreateUav;
+namespace UavPathOptimization.Application.UseCases.UavModel.Commands.CreateUavModel;
 
 public class CreateUavModelCommandHandler : IRequestHandler<CreateUavModelCommand, ErrorOr<Unit>>
 {
@@ -20,7 +19,7 @@ public class CreateUavModelCommandHandler : IRequestHandler<CreateUavModelComman
 
     public async Task<ErrorOr<Unit>> Handle(CreateUavModelCommand request, CancellationToken cancellationToken)
     {
-        var uav = _mapper.Map<UavModel>(request);
+        var uav = _mapper.Map<Domain.Entities.UavModel>(request);
 
         return await _mediator.Send(new AddUavModelToDbCommand(uav), cancellationToken);
     }

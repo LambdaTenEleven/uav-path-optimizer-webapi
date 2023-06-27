@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace UavPathOptimization.Application.UseCases.Uav.Commands.CreateUav;
+namespace UavPathOptimization.Application.UseCases.UavModel.Commands.CreateUavModel;
 
 public class CreateUavModelValidator : AbstractValidator<CreateUavModelCommand>
 {
