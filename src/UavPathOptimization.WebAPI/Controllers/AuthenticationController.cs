@@ -1,9 +1,7 @@
 ﻿using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UavPathOptimization.Application.UseCases.Authentication.Commands;
 using UavPathOptimization.Application.UseCases.Authentication.Commands.Register;
-using UavPathOptimization.Application.UseCases.Authentication.Queries;
 using UavPathOptimization.Application.UseCases.Authentication.Queries.Login;
 using UavPathOptimization.Domain.Contracts.Authentication;
 

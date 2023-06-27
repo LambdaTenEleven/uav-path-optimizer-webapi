@@ -1,9 +1,4 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using UavPathOptimization.Infrastructure.Authentication;
-
-namespace UavPathOptimization.WebAPI;
+﻿namespace UavPathOptimization.WebAPI;
 
 public static class DependencyInjection
 {

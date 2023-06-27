@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UavPathOptimization.Application.Common.Authentication;
 using UavPathOptimization.Application.Common.Services;
-using UavPathOptimization.Domain.Common;
 using UavPathOptimization.Domain.Common.Settings;
 using UavPathOptimization.Domain.Entities;
 

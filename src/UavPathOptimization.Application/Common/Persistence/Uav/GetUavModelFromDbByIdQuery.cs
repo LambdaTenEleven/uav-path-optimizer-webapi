@@ -4,4 +4,4 @@ using UavPathOptimization.Domain.Entities;
 
 namespace UavPathOptimization.Application.Common.Persistence.Uav;
 
-public record GetUavModelFromDbById(Guid Id) : IRequest<ErrorOr<UavModel>>;
+public record GetUavModelFromDbByIdQuery(Guid Id) : IRequest<ErrorOr<UavModel>>;

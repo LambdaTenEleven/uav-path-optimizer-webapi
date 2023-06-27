@@ -1,8 +1,10 @@
 ﻿using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using UavPathOptimization.Application.UseCases.UavModel.Commands.CreateUavModel;
-using UavPathOptimization.Application.UseCases.UavModel.Queries.GetUavModel;
+using UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
+using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModel;
+using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
+using UavPathOptimization.Domain.Common.Enums;
 using UavPathOptimization.Domain.Contracts.UavModel;
 
 namespace UavPathOptimization.WebAPI.Controllers;
@@ -39,6 +41,25 @@ public class UavModelController : ApiController
     public async Task<IActionResult> GetUavModel([FromRoute] Guid id)
     {
         var result = await _mediator.Send(new GetUavModelQuery(id));
+
+        return result.Match<IActionResult>(
+            success => Ok(success),
+            errors => Problem(errors)
+        );
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUavModelsPage([FromQuery] GetUavModelsPageRequest request)
+    {
+        var query = new GetUavModelsPageQuery(
+            request.Page,
+            request.Size,
+            request.Keyword,
+            request.SortField,
+            request.SortDirection
+        );
+        var result = await _mediator.Send(query);
 
         return result.Match<IActionResult>(
             success => Ok(success),

@@ -1,6 +1,5 @@
 ﻿using Mapster;
 using UavPathOptimization.Domain.Contracts.Authentication;
-using UavPathOptimization.Domain.Entities;
 using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.Mappers;

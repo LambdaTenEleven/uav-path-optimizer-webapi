@@ -8,13 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using UavPathOptimization.Application.Common.Authentication;
-using UavPathOptimization.Application.Common.Persistence;
 using UavPathOptimization.Application.Common.Services;
-using UavPathOptimization.Domain.Common;
 using UavPathOptimization.Domain.Common.Settings;
 using UavPathOptimization.Infrastructure.Authentication;
 using UavPathOptimization.Infrastructure.Common.EntityFramework;
-using UavPathOptimization.Infrastructure.Persistence;
 using UavPathOptimization.Infrastructure.Services;
 
 namespace UavPathOptimization.Infrastructure;
@@ -25,6 +22,8 @@ public static class DependencyInjection
         ConfigurationManager builderConfiguration)
     {
         var assembly = typeof(DependencyInjection).Assembly;
+
+        services.AddSingleton(typeof(PageResultProvider<>));
 
         services.AddDbContext<ApplicationDbContext>(
             options => options.UseSqlServer(builderConfiguration.GetConnectionString("DefaultConnection"))

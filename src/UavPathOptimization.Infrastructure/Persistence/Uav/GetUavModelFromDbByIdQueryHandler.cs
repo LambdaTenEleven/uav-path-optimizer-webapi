@@ -8,16 +8,16 @@ using UavPathOptimization.Infrastructure.Common.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Uav;
 
-public class GetUavModelFromDbHandler : IRequestHandler<GetUavModelFromDbById, ErrorOr<UavModel>>
+public class GetUavModelFromDbQueryHandler : IRequestHandler<GetUavModelFromDbByIdQuery, ErrorOr<UavModel>>
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public GetUavModelFromDbHandler(ApplicationDbContext dbContext)
+    public GetUavModelFromDbQueryHandler(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<ErrorOr<UavModel>> Handle(GetUavModelFromDbById request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UavModel>> Handle(GetUavModelFromDbByIdQuery request, CancellationToken cancellationToken)
     {
         var uav = await _dbContext.UavModels.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 

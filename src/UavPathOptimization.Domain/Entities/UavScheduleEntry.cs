@@ -1,5 +1,4 @@
 ﻿using UavPathOptimization.Domain.Contracts;
-using UavPathOptimization.Domain.Entities.Base;
 
 namespace UavPathOptimization.Domain.Entities;
 

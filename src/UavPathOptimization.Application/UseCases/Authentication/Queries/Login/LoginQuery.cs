@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using MediatR;
-using UavPathOptimization.Domain.Entities;
 using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Queries.Login;

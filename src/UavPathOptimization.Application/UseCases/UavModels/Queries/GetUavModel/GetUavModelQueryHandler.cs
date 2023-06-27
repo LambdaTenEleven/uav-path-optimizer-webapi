@@ -2,7 +2,7 @@
 using MediatR;
 using UavPathOptimization.Application.Common.Persistence.Uav;
 
-namespace UavPathOptimization.Application.UseCases.UavModel.Queries.GetUavModel;
+namespace UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModel;
 
 public class GetUavModelQueryHandler : IRequestHandler<GetUavModelQuery, ErrorOr<Domain.Entities.UavModel>>
 {
@@ -15,7 +15,7 @@ public class GetUavModelQueryHandler : IRequestHandler<GetUavModelQuery, ErrorOr
 
     public async Task<ErrorOr<Domain.Entities.UavModel>> Handle(GetUavModelQuery request, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetUavModelFromDbById(request.Id), cancellationToken);
+        var result = await _mediator.Send(new GetUavModelFromDbByIdQuery(request.Id), cancellationToken);
 
         return result;
     }
