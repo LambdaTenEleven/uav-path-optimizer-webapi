@@ -2,10 +2,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
+using UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
 using UavPathOptimization.Domain.Common.Enums;
 using UavPathOptimization.Domain.Contracts.UavModel;
+using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.WebAPI.Controllers;
 
@@ -63,6 +65,29 @@ public class UavModelController : ApiController
 
         return result.Match<IActionResult>(
             success => Ok(success),
+            errors => Problem(errors)
+        );
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateUavModel([FromRoute] Guid id, [FromBody] UpdateUavModelRequest request)
+    {
+        var command = new UpdateUavModelCommand(
+            new UavModel
+            {
+                Id = id,
+                Name = request.Name,
+                MaxSpeed = request.MaxSpeed,
+                MaxFlightTime = request.MaxFlightTime
+            }
+        );
+
+        var result = await _mediator.Send(command);
+
+        return result.Match<IActionResult>(
+            success => StatusCode(StatusCodes.Status204NoContent),
             errors => Problem(errors)
         );
     }

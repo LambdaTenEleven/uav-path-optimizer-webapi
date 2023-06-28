@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using UavPathOptimization.Application.Common.Persistence.Uav;
 using UavPathOptimization.Domain.Common;
 using UavPathOptimization.Domain.Entities;
+using UavPathOptimization.Domain.Entities.UavEntities;
 using UavPathOptimization.Infrastructure.Common.EntityFramework;
 using UavPathOptimization.Infrastructure.Services;
 

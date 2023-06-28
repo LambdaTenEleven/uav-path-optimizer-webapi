@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UavPathOptimization.Domain.Entities;
+using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Infrastructure.Common.EntityFramework;
 

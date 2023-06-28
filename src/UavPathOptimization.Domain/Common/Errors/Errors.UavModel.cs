@@ -11,6 +11,11 @@ public partial class Errors
             description: "Uav model could not be created."
         );
 
+        public static readonly Error UavModelNotUpdated = Error.Failure(
+            code: "UavModel.NotUpdated",
+            description: "Uav model could not be updated."
+        );
+
         public static readonly Error UavModelNotFound = Error.NotFound(
             code: "UavModel.NotFound",
             description: "Uav model could not be found."

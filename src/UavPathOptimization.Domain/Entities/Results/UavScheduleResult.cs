@@ -1,4 +1,6 @@
-﻿namespace UavPathOptimization.Domain.Entities;
+﻿using UavPathOptimization.Domain.Entities.UavEntities;
+
+namespace UavPathOptimization.Domain.Entities.Results;
 
 public class UavScheduleResult
 {

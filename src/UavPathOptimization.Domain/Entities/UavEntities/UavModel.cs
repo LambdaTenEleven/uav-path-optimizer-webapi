@@ -1,6 +1,6 @@
 ﻿using UavPathOptimization.Domain.Entities.Base;
 
-namespace UavPathOptimization.Domain.Entities;
+namespace UavPathOptimization.Domain.Entities.UavEntities;
 
 public class UavModel : BaseEntity
 {

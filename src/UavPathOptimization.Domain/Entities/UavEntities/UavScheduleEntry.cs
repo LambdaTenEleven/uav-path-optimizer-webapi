@@ -1,6 +1,6 @@
 ﻿using UavPathOptimization.Domain.Contracts;
 
-namespace UavPathOptimization.Domain.Entities;
+namespace UavPathOptimization.Domain.Entities.UavEntities;
 
 public class UavScheduleEntry
 {
