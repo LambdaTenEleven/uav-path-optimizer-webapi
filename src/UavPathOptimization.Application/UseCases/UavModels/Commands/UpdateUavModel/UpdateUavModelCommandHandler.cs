@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 using UavPathOptimization.Application.Common.Persistence.Uav;
+using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
@@ -16,6 +17,13 @@ public class UpdateUavModelCommandHandler : IRequestHandler<UpdateUavModelComman
 
     public async Task<ErrorOr<Unit>> Handle(UpdateUavModelCommand request, CancellationToken cancellationToken)
     {
+        var uavByName = await _mediator.Send(new GetUavModelFromDbByNameQuery(request.Name), cancellationToken);
+
+        if (!uavByName.IsError)
+        {
+            return Errors.UavModelErrors.UavModelNameAlreadyExist;
+        }
+
         var command = new UpdateUavModelFromDbCommand(
             new UavModel(
                 request.Id,

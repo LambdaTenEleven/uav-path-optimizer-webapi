@@ -17,7 +17,7 @@ public class UpdateUavModelCommandValidator : AbstractValidator<UpdateUavModelCo
         RuleFor(x => x.Name)
             .NotNull()
             .NotEmpty()
-            .MaximumLength(50);
+            .MaximumLength(100);
 
         RuleFor(x => x.MaxSpeed)
             .NotNull()

@@ -25,5 +25,10 @@ public partial class Errors
             code: "UavModel.NotFound",
             description: "Uav model could not be found."
         );
+
+        public static readonly Error UavModelNameAlreadyExist = Error.Conflict(
+            code: "UavModel.NameAlreadyExist",
+            description: "Uav model with this name already exist."
+        );
     }
 }

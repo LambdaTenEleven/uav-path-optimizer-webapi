@@ -70,6 +70,21 @@ public class UavModelCommandsTests : BaseTestFixture
     }
 
     [Test]
+    public async Task CreateUavModelCommand_Should_Return_Error_When_Name_Already_Exists()
+    {
+        // Arrange
+        var command = new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1));
+        await SendAsync(command);
+
+        // Act
+        var response = await SendAsync(command);
+
+        // Assert
+        response.IsError.Should().BeTrue();
+        response.FirstError.Type.Should().Be(ErrorType.Conflict);
+    }
+
+    [Test]
     public async Task CreateUavModelCommand_Should_Return_Error_When_MaxSpeed_Is_Less_Than_Zero()
     {
         // Arrange
