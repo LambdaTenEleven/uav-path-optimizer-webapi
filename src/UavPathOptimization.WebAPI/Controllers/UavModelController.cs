@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
+using UavPathOptimization.Application.UseCases.UavModels.Commands.DeleteUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
@@ -75,15 +76,26 @@ public class UavModelController : ApiController
     public async Task<IActionResult> UpdateUavModel([FromRoute] Guid id, [FromBody] UpdateUavModelRequest request)
     {
         var command = new UpdateUavModelCommand(
-            new UavModel
-            {
-                Id = id,
-                Name = request.Name,
-                MaxSpeed = request.MaxSpeed,
-                MaxFlightTime = request.MaxFlightTime
-            }
+            id,
+            request.Name,
+            request.MaxSpeed,
+            request.MaxFlightTime
         );
 
+        var result = await _mediator.Send(command);
+
+        return result.Match<IActionResult>(
+            success => StatusCode(StatusCodes.Status204NoContent),
+            errors => Problem(errors)
+        );
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteUavModel([FromRoute] Guid id)
+    {
+        var command = new DeleteUavModelCommand(id);
         var result = await _mediator.Send(command);
 
         return result.Match<IActionResult>(

@@ -13,8 +13,21 @@ public class UpdateUavModelCommandValidator : AbstractValidator<UpdateUavModelCo
     {
         _mediator = mediator;
 
-        RuleFor(x => x.UavModel)
+        RuleFor(x => x.Id)
             .NotNull();
+
+        RuleFor(x => x.Name)
+            .NotNull()
+            .NotEmpty()
+            .MaximumLength(50);
+
+        RuleFor(x => x.MaxSpeed)
+            .NotNull()
+            .GreaterThan(0);
+
+        RuleFor(x => x.MaxFlightTime)
+            .NotNull()
+            .GreaterThan(TimeSpan.Zero);
 
         // TODO: Add validation rules for UavModel properties.
     }

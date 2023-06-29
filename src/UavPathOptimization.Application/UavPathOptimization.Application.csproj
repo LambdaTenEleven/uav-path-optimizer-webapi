@@ -27,7 +27,6 @@
     <ItemGroup>
       <Folder Include="UseCases\Schedule\Commands\" />
       <Folder Include="UseCases\Schedule\Queries\" />
-      <Folder Include="UseCases\UavModels\Commands\DeleteUavModel\" />
     </ItemGroup>
 
 </Project>
