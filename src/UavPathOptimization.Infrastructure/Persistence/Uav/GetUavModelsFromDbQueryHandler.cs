@@ -1,16 +1,14 @@
 ﻿using ErrorOr;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using UavPathOptimization.Application.Common.Persistence.Uav;
 using UavPathOptimization.Domain.Common;
-using UavPathOptimization.Domain.Entities;
 using UavPathOptimization.Domain.Entities.UavEntities;
 using UavPathOptimization.Infrastructure.Common.EntityFramework;
 using UavPathOptimization.Infrastructure.Services;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Uav;
 
-public class GetUavModelsFromDbQueryHandler : IRequestHandler<GetUavModelsFromDbQuery, ErrorOr<ResultPage<UavModel>>>
+public sealed class GetUavModelsFromDbQueryHandler : IRequestHandler<GetUavModelsFromDbQuery, ErrorOr<ResultPage<UavModel>>>
 {
     private readonly ApplicationDbContext _dbContext;
 

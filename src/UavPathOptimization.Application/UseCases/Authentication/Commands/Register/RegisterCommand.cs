@@ -4,7 +4,7 @@ using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Commands.Register;
 
-public record RegisterCommand(
+public sealed record RegisterCommand(
     string UserName,
     string Email,
     string Password

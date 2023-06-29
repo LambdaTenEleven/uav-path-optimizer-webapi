@@ -6,9 +6,8 @@ using UavPathOptimization.Application.UseCases.UavModels.Commands.DeleteUavModel
 using UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
-using UavPathOptimization.Domain.Common.Enums;
 using UavPathOptimization.Domain.Contracts.UavModel;
-using UavPathOptimization.Domain.Entities.UavEntities;
+using UavPathOptimization.WebAPI.Common;
 
 namespace UavPathOptimization.WebAPI.Controllers;
 

@@ -6,7 +6,7 @@ using UavPathOptimization.Infrastructure.Common.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Uav;
 
-public class DeleteUavModelFromDbCommandHandler : IRequestHandler<DeleteUavModelFromDbCommand, ErrorOr<Unit>>
+public sealed class DeleteUavModelFromDbCommandHandler : IRequestHandler<DeleteUavModelFromDbCommand, ErrorOr<Unit>>
 {
     private readonly ApplicationDbContext _dbContext;
 

@@ -9,7 +9,7 @@ using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 
-public class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
+public sealed class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
 {
     private readonly IMapper _mapper;
 

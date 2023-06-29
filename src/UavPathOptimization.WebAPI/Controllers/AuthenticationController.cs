@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.Authentication.Commands.Register;
 using UavPathOptimization.Application.UseCases.Authentication.Queries.Login;
 using UavPathOptimization.Domain.Contracts.Authentication;
+using UavPathOptimization.WebAPI.Common;
 
 namespace UavPathOptimization.WebAPI.Controllers;
 

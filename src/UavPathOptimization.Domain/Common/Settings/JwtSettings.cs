@@ -1,6 +1,6 @@
 ﻿namespace UavPathOptimization.Domain.Common.Settings;
 
-public class JwtSettings
+public sealed class JwtSettings
 {
     public const string SectionName = "JwtSettings";
     public string SecretKey { get; init; } = null!;

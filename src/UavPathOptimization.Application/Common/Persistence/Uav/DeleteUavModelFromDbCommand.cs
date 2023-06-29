@@ -3,4 +3,4 @@ using MediatR;
 
 namespace UavPathOptimization.Application.Common.Persistence.Uav;
 
-public record DeleteUavModelFromDbCommand(Guid Id) : IRequest<ErrorOr<Unit>>;
+public sealed record DeleteUavModelFromDbCommand(Guid Id) : IRequest<ErrorOr<Unit>>;

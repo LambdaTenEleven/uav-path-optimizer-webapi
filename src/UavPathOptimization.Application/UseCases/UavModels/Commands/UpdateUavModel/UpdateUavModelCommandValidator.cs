@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 using MediatR;
-using UavPathOptimization.Application.Common.Persistence.Uav;
-using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
 

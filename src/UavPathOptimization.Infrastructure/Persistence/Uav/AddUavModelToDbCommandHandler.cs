@@ -6,7 +6,7 @@ using UavPathOptimization.Infrastructure.Common.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Uav;
 
-public class AddUavModelToDbCommandHandler : IRequestHandler<AddUavModelToDbCommand, ErrorOr<Guid>>
+public sealed class AddUavModelToDbCommandHandler : IRequestHandler<AddUavModelToDbCommand, ErrorOr<Guid>>
 {
     private readonly ApplicationDbContext _dbContext;
 

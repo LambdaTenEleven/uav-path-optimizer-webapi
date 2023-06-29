@@ -2,7 +2,6 @@
 using MediatR;
 using UavPathOptimization.Application.Common.Persistence.Uav;
 using UavPathOptimization.Domain.Common;
-using UavPathOptimization.Domain.Entities;
 using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;

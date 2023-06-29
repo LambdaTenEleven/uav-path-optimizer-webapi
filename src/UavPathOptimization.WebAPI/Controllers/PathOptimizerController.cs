@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 using UavPathOptimization.Domain.Contracts.OptimizePath;
+using UavPathOptimization.WebAPI.Common;
 
 namespace UavPathOptimization.WebAPI.Controllers;
 

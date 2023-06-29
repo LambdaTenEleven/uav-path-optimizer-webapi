@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using UavPathOptimization.WebAPI.Common.Http;
 
-namespace UavPathOptimization.WebAPI.Controllers;
+namespace UavPathOptimization.WebAPI.Common;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ApiController : ControllerBase
+public abstract class ApiController : ControllerBase
 {
     protected IActionResult Problem(List<Error> errors)
     {

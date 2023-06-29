@@ -8,7 +8,7 @@ using UavPathOptimization.Infrastructure.Common.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Authentication;
 
-public class AddUserToDbCommandHandler : IRequestHandler<AddUserToDbCommand, ErrorOr<Guid>>
+public sealed class AddUserToDbCommandHandler : IRequestHandler<AddUserToDbCommand, ErrorOr<Guid>>
 {
     private readonly UserManager<InfrastructureUser> _userManager;
 

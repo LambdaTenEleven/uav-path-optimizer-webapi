@@ -6,7 +6,7 @@ using UavPathOptimization.Infrastructure.Common.EntityFramework;
 
 namespace UavPathOptimization.Infrastructure.Persistence.Authentication;
 
-public class CheckUserPasswordQueryHandler : IRequestHandler<CheckUserPasswordQuery, bool>
+public sealed class CheckUserPasswordQueryHandler : IRequestHandler<CheckUserPasswordQuery, bool>
 {
     private readonly UserManager<InfrastructureUser> _userManager;
 

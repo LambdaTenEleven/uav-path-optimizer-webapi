@@ -2,7 +2,7 @@
 
 namespace UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 
-public class OptimizePathQueryValidator : AbstractValidator<OptimizePathQuery>
+public sealed class OptimizePathQueryValidator : AbstractValidator<OptimizePathQuery>
 {
     public OptimizePathQueryValidator()
     {

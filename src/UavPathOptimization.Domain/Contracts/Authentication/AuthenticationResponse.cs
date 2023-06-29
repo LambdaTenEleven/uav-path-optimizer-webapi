@@ -1,6 +1,6 @@
 ﻿namespace UavPathOptimization.Domain.Contracts.Authentication;
 
-public record AuthenticationResponse(
+public sealed record AuthenticationResponse(
     Guid Id,
     string Token
 );

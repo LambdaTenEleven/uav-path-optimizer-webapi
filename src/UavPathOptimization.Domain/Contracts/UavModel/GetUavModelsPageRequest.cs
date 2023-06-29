@@ -2,7 +2,7 @@
 
 namespace UavPathOptimization.Domain.Contracts.UavModel;
 
-public record GetUavModelsPageRequest(
+public sealed record GetUavModelsPageRequest(
     int Page,
     int Size,
     string? Keyword = null,

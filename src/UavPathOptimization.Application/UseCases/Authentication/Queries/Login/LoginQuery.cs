@@ -4,7 +4,7 @@ using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Queries.Login;
 
-public record LoginQuery(
+public sealed record LoginQuery(
     string Email,
     string Password
 ) : IRequest<ErrorOr<AuthenticationResult>>;

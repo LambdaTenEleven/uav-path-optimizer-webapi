@@ -3,4 +3,4 @@ using MediatR;
 
 namespace UavPathOptimization.Application.Common.Persistence.User;
 
-public record GetUserByEmailQuery(string Email) : IRequest<ErrorOr<Domain.Entities.User>>;
+public sealed record GetUserByEmailQuery(string Email) : IRequest<ErrorOr<Domain.Entities.User>>;

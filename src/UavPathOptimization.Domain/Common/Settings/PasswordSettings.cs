@@ -1,6 +1,6 @@
 ﻿namespace UavPathOptimization.Domain.Common.Settings;
 
-public class PasswordSettings
+public sealed class PasswordSettings
 {
     public const string SectionName = "PasswordSettings";
     public bool RequireDigit { get; init; }

@@ -4,7 +4,7 @@ using UavPathOptimization.Domain.Common.Settings;
 
 namespace UavPathOptimization.Application.UseCases.Authentication.Commands.Register;
 
-public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
+public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
     private readonly IOptions<PasswordSettings> _passwordSettings;
 
