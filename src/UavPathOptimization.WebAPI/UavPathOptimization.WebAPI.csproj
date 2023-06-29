@@ -26,4 +26,8 @@
       <Folder Include="wwwroot\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="UavPathOptimization.Application.IntegrationTests" />
+    </ItemGroup>
+
 </Project>

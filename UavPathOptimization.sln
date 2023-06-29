@@ -10,9 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.Infrast
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A0A55B7A-28B3-4020-ABE1-D129B8ECEFE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.Tests.Application", "tests\UavPathOptimization.Tests.Application\UavPathOptimization.Tests.Application.csproj", "{9C29FAA8-761C-459D-A5BB-640980E56B31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.Application.UnitTests", "tests\UavPathOptimization.Application.UnitTests\UavPathOptimization.Application.UnitTests.csproj", "{9C29FAA8-761C-459D-A5BB-640980E56B31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.WebAPI", "src\UavPathOptimization.WebAPI\UavPathOptimization.WebAPI.csproj", "{8796CE2F-F369-45CC-B8EB-79CCB88832F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.Application.IntegrationTests", "tests\UavPathOptimization.Application.IntegrationTests\UavPathOptimization.Application.IntegrationTests.csproj", "{BBCC159F-9265-48C7-A168-654792E77A72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{8796CE2F-F369-45CC-B8EB-79CCB88832F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8796CE2F-F369-45CC-B8EB-79CCB88832F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8796CE2F-F369-45CC-B8EB-79CCB88832F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBCC159F-9265-48C7-A168-654792E77A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBCC159F-9265-48C7-A168-654792E77A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBCC159F-9265-48C7-A168-654792E77A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBCC159F-9265-48C7-A168-654792E77A72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B5E2BDE9-380D-475D-8FA5-C7BC500ADD38} = {B586A568-477C-4A9B-9D0F-23FA5567BF69}
@@ -47,5 +53,6 @@ Global
 		{DE1926E7-A7D9-4223-B157-DE0DFA7D068C} = {B586A568-477C-4A9B-9D0F-23FA5567BF69}
 		{9C29FAA8-761C-459D-A5BB-640980E56B31} = {A0A55B7A-28B3-4020-ABE1-D129B8ECEFE0}
 		{8796CE2F-F369-45CC-B8EB-79CCB88832F4} = {B586A568-477C-4A9B-9D0F-23FA5567BF69}
+		{BBCC159F-9265-48C7-A168-654792E77A72} = {A0A55B7A-28B3-4020-ABE1-D129B8ECEFE0}
 	EndGlobalSection
 EndGlobal

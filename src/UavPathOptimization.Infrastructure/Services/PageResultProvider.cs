@@ -9,12 +9,12 @@ namespace UavPathOptimization.Infrastructure.Services;
 public class PageResultProvider<T>
 {
     public async Task<ErrorOr<ResultPage<T>>> GetPagedResult(
-            IQueryable<T> query,
-            int pageNumber,
-            int pageSize,
-            string? sortField,
-            SortDirection sortDirection,
-            CancellationToken cancellationToken)
+        IQueryable<T> query,
+        int pageNumber,
+        int pageSize,
+        string? sortField,
+        SortDirection sortDirection,
+        CancellationToken cancellationToken)
     {
         // Apply sorting based on sort field and direction
         if (!string.IsNullOrEmpty(sortField))
