@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using UavPathOptimization.Domain.Common.ValidationRules;
+using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
 
@@ -13,5 +15,9 @@ public class GetUavModelsPageQueryValidator : AbstractValidator<GetUavModelsPage
         RuleFor(x => x.PageSize)
             .GreaterThanOrEqualTo(1)
             .WithMessage("Page size must be greater than or equal to 1.");
+
+        RuleFor(x => x.SortField)
+            .Must(PropertyNameValidationRules.MustBeValidPropertyName<UavModel>)
+            .WithMessage("Sort field must be a valid property name of UavModel.");
     }
 }
