@@ -6,6 +6,8 @@ public class UavScheduleEntry
 {
     public GeoCoordinateDto Location { get; set; } = null!;
 
+    public bool IsPBR { get; set; }
+
     public DateTime ArrivalTime { get; set; }
 
     public DateTime DepartureTime { get; set; }

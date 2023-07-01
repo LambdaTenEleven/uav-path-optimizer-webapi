@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
-using Mapster;
-using MapsterMapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using UavPathOptimization.Application.Common.Behaviours;
 using UavPathOptimization.Domain.Common.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using UavPathOptimization.Application.Common.Services;
 
 namespace UavPathOptimization.Application;
 
@@ -23,16 +22,12 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(assembly);
 
-        var config = TypeAdapterConfig.GlobalSettings;
-        config.Scan(assembly);
-        services.AddSingleton(config);
-
-        services.AddScoped<IMapper, ServiceMapper>();
-
         // password settings
         var passwordSettings = new PasswordSettings();
         builderConfiguration.Bind(PasswordSettings.SectionName, passwordSettings);
         services.AddSingleton(Options.Create(passwordSettings));
+
+        services.AddSingleton<IDistanceCalculator, DistanceCalculator>();
 
         return services;
     }

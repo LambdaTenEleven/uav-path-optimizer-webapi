@@ -26,7 +26,6 @@
 
     <ItemGroup>
       <Folder Include="UseCases\Schedule\Commands\" />
-      <Folder Include="UseCases\Schedule\Queries\" />
     </ItemGroup>
 
 </Project>

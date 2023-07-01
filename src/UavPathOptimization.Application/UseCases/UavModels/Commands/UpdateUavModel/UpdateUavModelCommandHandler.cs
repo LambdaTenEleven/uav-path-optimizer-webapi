@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using MapsterMapper;
 using MediatR;
 using UavPathOptimization.Application.Common.Persistence.Uav;
 using UavPathOptimization.Domain.Common.Errors;
@@ -10,9 +11,12 @@ public class UpdateUavModelCommandHandler : IRequestHandler<UpdateUavModelComman
 {
     private readonly IMediator _mediator;
 
-    public UpdateUavModelCommandHandler(IMediator mediator)
+    private readonly IMapper _mapper;
+
+    public UpdateUavModelCommandHandler(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     public async Task<ErrorOr<Unit>> Handle(UpdateUavModelCommand request, CancellationToken cancellationToken)
@@ -24,14 +28,9 @@ public class UpdateUavModelCommandHandler : IRequestHandler<UpdateUavModelComman
             return Errors.UavModelErrors.UavModelNameAlreadyExist;
         }
 
-        var command = new UpdateUavModelFromDbCommand(
-            new UavModel(
-                request.Id,
-                request.Name,
-                request.MaxSpeed,
-                request.MaxFlightTime
-            )
-        );
+        var uav = _mapper.Map<UavModel>(request);
+
+        var command = new UpdateUavModelFromDbCommand(uav);
 
         return await _mediator.Send(command, cancellationToken);
     }

@@ -33,7 +33,7 @@ public class UpdateUavModelCommandTests : BaseTestFixture
         response.IsError.Should().BeFalse();
         uavModel.Should().NotBeNull();
         uavModel!.Name.Should().Be(newName);
-        uavModel.MaxSpeed.Should().Be(newMaxSpeed);
+        uavModel.MaxSpeed.Value.Should().Be(newMaxSpeed);
         uavModel.MaxFlightTime.Should().Be(newMaxFlightTime);
     }
 
