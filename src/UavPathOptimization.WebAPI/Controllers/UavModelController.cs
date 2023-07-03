@@ -34,7 +34,7 @@ public class UavModelController : ApiController
         var result = await _mediator.Send(command);
 
         return result.Match<IActionResult>(
-            success => StatusCode(StatusCodes.Status201Created),
+            success => StatusCode(StatusCodes.Status201Created), //TODO add location header
             errors => Problem(errors)
         );
     }

@@ -30,5 +30,10 @@ public partial class Errors
             code: "UavModel.NameAlreadyExist",
             description: "Uav model with this name already exist."
         );
+
+        public static readonly Error UavModelMaxFlightTimeExceeded = Error.Failure(
+            code: "UavModel.MaxFlightTimeExceeded",
+            description: "Uav model max flight time exceeded."
+        );
     }
 }

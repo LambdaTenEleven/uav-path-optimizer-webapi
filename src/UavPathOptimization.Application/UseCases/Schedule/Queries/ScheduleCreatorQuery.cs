@@ -6,7 +6,7 @@ using UavPathOptimization.Domain.Entities.Results;
 namespace UavPathOptimization.Application.UseCases.Schedule.Queries;
 
 public record ScheduleCreatorQuery(
-    Guid UavId,
+    Guid UavModelId,
     IList<GeoCoordinateDto> Path,
     DateTime DepartureTimeStart,
     TimeSpan MonitoringTime,

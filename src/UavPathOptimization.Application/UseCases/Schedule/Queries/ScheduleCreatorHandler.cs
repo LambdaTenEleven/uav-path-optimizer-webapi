@@ -3,7 +3,6 @@ using MediatR;
 using UavPathOptimization.Application.Common.Services;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModel;
 using UavPathOptimization.Domain.Common.Errors;
-using UavPathOptimization.Domain.Contracts;
 using UavPathOptimization.Domain.Entities.Results;
 using UavPathOptimization.Domain.Entities.UavEntities;
 
@@ -23,7 +22,7 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
 
     public async Task<ErrorOr<UavScheduleResult>> Handle(ScheduleCreatorQuery request, CancellationToken cancellationToken)
     {
-        var uav = await _mediator.Send(new GetUavModelQuery(request.UavId), cancellationToken);
+        var uav = await _mediator.Send(new GetUavModelQuery(request.UavModelId), cancellationToken);
         if (uav.FirstError.Type == ErrorType.NotFound)
         {
             return Errors.UavModelErrors.UavModelNotFound;
@@ -32,7 +31,8 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
 
         var scheduleUAV = new List<UavScheduleEntry>();
 
-        var start = new UavScheduleEntry()
+        // calculate first point
+        var start = new UavScheduleEntry
         {
             Location = request.Path[0],
             IsPBR = false,
@@ -46,7 +46,14 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
 
         for (int i = 1; i < request.Path.Count; i++)
         {
-            var flightTime = CalculateFlightTime(request.Path[i], request.Path[i - 1]);
+            var distanceMeters = _distanceCalculator.CalculateDistance(request.Path[i], request.Path[i - 1]);
+            var flightTime = (distanceMeters / uav.Value.MaxSpeed).ToTimeSpan();
+
+            if (flightTime + request.MonitoringTime > uav.Value.MaxFlightTime)
+            {
+                return Errors.UavModelErrors.UavModelMaxFlightTimeExceeded;
+            }
+
             var arrivalTime = scheduleUAV[i - 1].ArrivalTime + flightTime + scheduleUAV[i - 1].TimeSpent;
             var isPBR = false;
             var timeLeft = scheduleUAV[i - 1].BatteryTimeLeft - request.MonitoringTime - flightTime;
@@ -73,7 +80,15 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
             scheduleUAV.Add(entry);
         }
 
-        var flightTimeToDH = CalculateFlightTime(request.Path[0], scheduleUAV.Last().Location);
+        // calculate last point
+        var distanceToDH = _distanceCalculator.CalculateDistance(request.Path[0], scheduleUAV.Last().Location);
+        var flightTimeToDH = (distanceToDH / uav.Value.MaxSpeed).ToTimeSpan();
+
+        if(flightTimeToDH + request.MonitoringTime > uav.Value.MaxFlightTime)
+        {
+            return Errors.UavModelErrors.UavModelMaxFlightTimeExceeded;
+        }
+
         var arrival = scheduleUAV.Last().DepartureTime + flightTimeToDH;
 
         var endPoint = new UavScheduleEntry
@@ -90,18 +105,8 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
 
         return new UavScheduleResult
         {
-            UavModelId = request.UavId,
+            UavModelId = request.UavModelId,
             UavScheduleEntries = scheduleUAV
         };
-    }
-
-    private TimeSpan CalculateFlightTime(GeoCoordinateDto point1, GeoCoordinateDto point2)
-    {
-        var distance = _distanceCalculator.CalculateDistance(point1, point2);
-
-        // caclulate flight time in m/s
-
-        //TODO
-        return TimeSpan.Zero;
     }
 }

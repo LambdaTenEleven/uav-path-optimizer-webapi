@@ -1,8 +1,9 @@
 ﻿using UavPathOptimization.Domain.Contracts;
+using UnitsNet;
 
 namespace UavPathOptimization.Application.Common.Services;
 
 public interface IDistanceCalculator
 {
-    double CalculateDistance(GeoCoordinateDto point1, GeoCoordinateDto point2);
+    Length CalculateDistance(GeoCoordinateDto point1, GeoCoordinateDto point2);
 }
