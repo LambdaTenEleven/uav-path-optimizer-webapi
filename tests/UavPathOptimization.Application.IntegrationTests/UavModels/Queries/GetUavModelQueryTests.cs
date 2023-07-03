@@ -18,18 +18,18 @@ public class GetUavModelQueryTests : BaseTestFixture
         var creationResult = await SendAsync(
             new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1))
         );
-        var uavId = creationResult.Value;
+        var uav = creationResult.Value;
 
-        var query = new GetUavModelQuery(uavId);
+        var query = new GetUavModelQuery(uav.Id);
 
         // Act
         var result = await SendAsync(query);
-        var confirmedResult = await FindAsync<UavModel>(uavId);
+        var confirmedResult = await FindAsync<UavModel>(uav.Id);
 
         // Assert
         result.Should().NotBeNull();
         result.IsError.Should().BeFalse();
-        result.Value.Id.Should().Be(uavId);
+        result.Value.Id.Should().Be(uav.Id);
 
         confirmedResult.Should().NotBeNull();
         confirmedResult!.Id.Should().Be(result.Value.Id);

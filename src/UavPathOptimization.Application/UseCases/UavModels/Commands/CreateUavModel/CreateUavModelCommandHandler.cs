@@ -7,7 +7,7 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
 
-public class CreateUavModelCommandHandler : IRequestHandler<CreateUavModelCommand, ErrorOr<Guid>>
+public class CreateUavModelCommandHandler : IRequestHandler<CreateUavModelCommand, ErrorOr<UavModel>>
 {
     private readonly IMediator _mediator;
 
@@ -19,7 +19,7 @@ public class CreateUavModelCommandHandler : IRequestHandler<CreateUavModelComman
         _mapper = mapper;
     }
 
-    public async Task<ErrorOr<Guid>> Handle(CreateUavModelCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UavModel>> Handle(CreateUavModelCommand request, CancellationToken cancellationToken)
     {
         var uavByName = await _mediator.Send(new GetUavModelFromDbByNameQuery(request.Name), cancellationToken);
 

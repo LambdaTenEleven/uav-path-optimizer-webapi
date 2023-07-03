@@ -18,16 +18,16 @@ public class UpdateUavModelCommandTests : BaseTestFixture
         var creationResult = await SendAsync(
             new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1))
         );
-        var uavId = creationResult.Value;
+        var uav = creationResult.Value;
         var newName = "New UAV Model Name";
         var newMaxSpeed = 20.0;
         var newMaxFlightTime = TimeSpan.FromHours(2);
 
-        var command = new UpdateUavModelCommand(uavId, newName, newMaxSpeed, newMaxFlightTime);
+        var command = new UpdateUavModelCommand(uav.Id, newName, newMaxSpeed, newMaxFlightTime);
 
         // Act
         var response = await SendAsync(command);
-        var uavModel = await FindAsync<UavModel>(uavId);
+        var uavModel = await FindAsync<UavModel>(uav.Id);
 
         // Assert
         response.IsError.Should().BeFalse();
@@ -63,12 +63,12 @@ public class UpdateUavModelCommandTests : BaseTestFixture
         var creationResult = await SendAsync(
             new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1))
         );
-        var uavId = creationResult.Value;
+        var uav = creationResult.Value;
         var newName = "";
         var newMaxSpeed = 20.0;
         var newMaxFlightTime = TimeSpan.FromHours(2);
 
-        var command = new UpdateUavModelCommand(uavId, newName, newMaxSpeed, newMaxFlightTime);
+        var command = new UpdateUavModelCommand(uav.Id, newName, newMaxSpeed, newMaxFlightTime);
 
         // Act
         var response = await SendAsync(command);
@@ -86,7 +86,7 @@ public class UpdateUavModelCommandTests : BaseTestFixture
         var creationResult = await SendAsync(
             new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1))
         );
-        var uavId = creationResult.Value;
+        var uav = creationResult.Value;
         var newName = "New UAV Model Name";
         var newMaxSpeed = 20.0;
         var newMaxFlightTime = TimeSpan.FromHours(2);
@@ -94,7 +94,7 @@ public class UpdateUavModelCommandTests : BaseTestFixture
             new CreateUavModelCommand(newName, 10.0, TimeSpan.FromHours(1))
         );
 
-        var command = new UpdateUavModelCommand(uavId, newName, newMaxSpeed, newMaxFlightTime);
+        var command = new UpdateUavModelCommand(uav.Id, newName, newMaxSpeed, newMaxFlightTime);
 
         // Act
         var response = await SendAsync(command);
@@ -111,12 +111,12 @@ public class UpdateUavModelCommandTests : BaseTestFixture
         var creationResult = await SendAsync(
             new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1))
         );
-        var uavId = creationResult.Value;
+        var uav = creationResult.Value;
         var newName = "New UAV Model Name";
         var newMaxSpeed = -20.0;
         var newMaxFlightTime = TimeSpan.FromHours(2);
 
-        var command = new UpdateUavModelCommand(uavId, newName, newMaxSpeed, newMaxFlightTime);
+        var command = new UpdateUavModelCommand(uav.Id, newName, newMaxSpeed, newMaxFlightTime);
 
         // Act
         var response = await SendAsync(command);
@@ -134,12 +134,12 @@ public class UpdateUavModelCommandTests : BaseTestFixture
         var creationResult = await SendAsync(
             new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1))
         );
-        var uavId = creationResult.Value;
+        var uav = creationResult.Value;
         var newName = "New UAV Model Name";
         var newMaxSpeed = 20.0;
         var newMaxFlightTime = TimeSpan.Zero;
 
-        var command = new UpdateUavModelCommand(uavId, newName, newMaxSpeed, newMaxFlightTime);
+        var command = new UpdateUavModelCommand(uav.Id, newName, newMaxSpeed, newMaxFlightTime);
 
         // Act
         var response = await SendAsync(command);

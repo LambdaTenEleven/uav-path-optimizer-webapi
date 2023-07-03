@@ -18,13 +18,13 @@ public class DeleteUavModelCommandTests : BaseTestFixture
         var creationResult = await SendAsync(
             new CreateUavModelCommand("UAV Model", 10.0, TimeSpan.FromHours(1))
         );
-        var uavId = creationResult.Value;
+        var uav = creationResult.Value;
 
-        var command = new DeleteUavModelCommand(uavId);
+        var command = new DeleteUavModelCommand(uav.Id);
 
         // Act
         var response = await SendAsync(command);
-        var uavModel = await FindAsync<UavModel>(uavId);
+        var uavModel = await FindAsync<UavModel>(uav.Id);
 
         // Assert
         response.IsError.Should().BeFalse();

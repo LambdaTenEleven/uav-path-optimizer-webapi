@@ -1,5 +1,4 @@
-﻿using Mapster;
-using MapsterMapper;
+﻿using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
@@ -28,13 +27,14 @@ public class UavModelController : ApiController
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateUavModel([FromBody] CreateUavModelRequest request)
     {
         var command = _mapper.Map<CreateUavModelCommand>(request);
         var result = await _mediator.Send(command);
 
         return result.Match<IActionResult>(
-            success => StatusCode(StatusCodes.Status201Created), //TODO add location header
+            success => CreatedAtAction(nameof(GetUavModel), new { id = success.Id }, _mapper.Map<UavModelResponse>(success)),
             errors => Problem(errors)
         );
     }
@@ -54,6 +54,7 @@ public class UavModelController : ApiController
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetUavModelsPage([FromQuery] GetUavModelsPageRequest request)
     {
         var query = new GetUavModelsPageQuery(
