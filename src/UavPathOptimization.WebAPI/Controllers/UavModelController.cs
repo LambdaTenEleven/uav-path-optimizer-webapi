@@ -1,4 +1,5 @@
-﻿using MapsterMapper;
+﻿using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
@@ -6,6 +7,7 @@ using UavPathOptimization.Application.UseCases.UavModels.Commands.DeleteUavModel
 using UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModel;
 using UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
+using UavPathOptimization.Domain.Common;
 using UavPathOptimization.Domain.Contracts.UavModel;
 using UavPathOptimization.WebAPI.Common;
 
@@ -45,7 +47,7 @@ public class UavModelController : ApiController
         var result = await _mediator.Send(new GetUavModelQuery(id));
 
         return result.Match<IActionResult>(
-            success => Ok(success),
+            success => Ok(_mapper.Map<UavModelResponse>(success)),
             errors => Problem(errors)
         );
     }
@@ -64,7 +66,7 @@ public class UavModelController : ApiController
         var result = await _mediator.Send(query);
 
         return result.Match<IActionResult>(
-            success => Ok(success),
+            success => Ok(_mapper.Map<ResultPage<UavModelResponse>>(success)),
             errors => Problem(errors)
         );
     }
