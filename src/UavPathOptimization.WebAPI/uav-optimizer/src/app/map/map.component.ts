@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { latLng, MapOptions, tileLayer, polyline, Layer, LayerGroup } from 'leaflet';
-import { Marker, marker } from 'leaflet';
-import { icon } from 'leaflet';
+import { Marker, marker, icon, LatLngExpression, Icon } from 'leaflet';
 
 @Component({
   selector: 'app-map',
@@ -11,12 +10,14 @@ import { icon } from 'leaflet';
 })
 export class MapComponent implements OnInit {
   mapOptions: MapOptions = {};
-  layers: (Marker | LayerGroup)[] = [];
-  uavCount: number = 1;
+  markerLayer: LayerGroup = new LayerGroup();
+  pathLayers: LayerGroup = new LayerGroup();
+  uavCount = 1;
   coordinates: { latitude: number; longitude: number }[] = [];
   response: any;
   pathColors: string[] = [];
-  errorMessage: string = '';
+  errorMessage = '';
+  startingMarker: Marker | null = null;
 
   constructor(private apiService: ApiService) {}
 
@@ -32,18 +33,72 @@ export class MapComponent implements OnInit {
     };
   }
 
-  addMarker(latitude: number, longitude: number): void {
-    const newMarker = marker([latitude, longitude], {
-      icon: icon({
-        iconUrl: 'assets/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12.5, 41],
-        popupAnchor: [0, -41],
-        iconRetinaUrl: 'assets/images/marker-icon-2x.png',
-      })
+  createMarkerIcon(isStartingMarker: boolean): Icon {
+    const iconUrl = isStartingMarker
+      ? 'assets/images/marker-icon-start.png'
+      : 'assets/images/marker-icon.png';
+    const iconRetinaUrl = isStartingMarker
+      ? 'assets/images/marker-icon-start-2x.png'
+      : 'assets/images/marker-icon-2x.png';
+
+    return icon({
+      iconUrl: iconUrl,
+      iconSize: [25, 41],
+      iconAnchor: [12.5, 41],
+      popupAnchor: [0, -41],
+      iconRetinaUrl: iconRetinaUrl
     });
-    this.layers.push(newMarker);
+  }
+
+  addMarker(latitude: number, longitude: number): void {
+    const isStartingMarker = this.startingMarker === null;
+
+    const newMarker = marker([latitude, longitude], {
+      icon: this.createMarkerIcon(isStartingMarker),
+      draggable: true
+    });
+
+    newMarker.on('dragend', (event: any) => {
+      const marker = event.target;
+      const position = marker.getLatLng();
+      const index = this.markerLayer.getLayers().indexOf(marker);
+      this.coordinates[index] = { latitude: position.lat, longitude: position.lng };
+    });
+
+    newMarker.on('click', (event: any) => {
+      const marker = event.target;
+      const index = this.markerLayer.getLayers().indexOf(marker);
+
+      if (index !== -1) {
+        const confirmed = confirm('Are you sure you want to delete this marker?');
+        if (confirmed) {
+          this.markerLayer.removeLayer(marker);
+          this.coordinates.splice(index, 1);
+          this.updateStartingMarker();
+        }
+      }
+    });
+
+    this.markerLayer.addLayer(newMarker);
     this.coordinates.push({ latitude, longitude });
+    this.updateStartingMarker();
+  }
+
+  updateStartingMarker(): void {
+    const markerLayers = this.markerLayer.getLayers();
+    if (markerLayers.length > 0) {
+      if (!this.startingMarker) {
+        // Set the first marker as the starting marker
+        this.startingMarker = markerLayers[0] as Marker;
+        this.startingMarker.setIcon(this.createMarkerIcon(true));
+      } else if (!this.markerLayer.hasLayer(this.startingMarker)) {
+        // If the starting marker is deleted, set the next available marker as the starting marker
+        this.startingMarker = markerLayers[0] as Marker;
+        this.startingMarker.setIcon(this.createMarkerIcon(true));
+      }
+    } else {
+      this.startingMarker = null;
+    }
   }
 
   onMapClick(event: any): void {
@@ -53,23 +108,21 @@ export class MapComponent implements OnInit {
   optimizePath(): void {
     this.clearPaths();
     this.apiService.optimizePath(this.uavCount, this.coordinates).subscribe(
-      response => {
+      (response) => {
         this.response = response;
         this.drawPaths();
       },
-      error => {
-        //this.errorMessage = error.error.errors;
-        for (var key in error.error.errors) {
-          this.errorMessage += error.error.errors[key] + "\n";
+      (error) => {
+        for (const key in error.error.errors) {
+          this.errorMessage += error.error.errors[key] + '\n';
         }
-        alert(this.errorMessage)
+        alert(this.errorMessage);
         this.errorMessage = '';
       }
     );
   }
 
   drawPaths(): void {
-    const pathLayers: Layer[] = [];
     this.response.uavPaths.forEach((path: any) => {
       const latLngs = path.path.map((point: any) => [point.latitude, point.longitude]);
       const color = getRandomColor();
@@ -79,16 +132,13 @@ export class MapComponent implements OnInit {
         weight: 8
       };
       const polylineLayer = polyline(latLngs, polylineOptions);
-      pathLayers.push(polylineLayer);
+      this.pathLayers.addLayer(polylineLayer);
     });
-    const pathsLayerGroup = new LayerGroup(pathLayers);
-    this.layers.push(pathsLayerGroup);
   }
 
   clearPaths(): void {
-    // Filter out the path layers from the layers array
     this.pathColors = [];
-    this.layers = this.layers.filter(layer => !(layer instanceof LayerGroup));
+    this.pathLayers.clearLayers();
   }
 
   getPathColor(path: any): string {
@@ -98,9 +148,11 @@ export class MapComponent implements OnInit {
 
   clearMap(): void {
     this.pathColors = [];
-    this.layers = [];
     this.coordinates = [];
     this.response = null;
+    this.markerLayer.clearLayers();
+    this.pathLayers.clearLayers();
+    this.startingMarker = null;
   }
 }
 
