@@ -7,11 +7,13 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
+    ScheduleComponent,
   ],
   imports: [
     BrowserModule,

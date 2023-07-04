@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { latLng, MapOptions, tileLayer, polyline, Layer, LayerGroup } from 'leaflet';
 import { Marker, marker, icon, LatLngExpression, Icon } from 'leaflet';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-map',
@@ -19,7 +20,7 @@ export class MapComponent implements OnInit {
   errorMessage = '';
   startingMarker: Marker | null = null;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.mapOptions = {
@@ -153,6 +154,10 @@ export class MapComponent implements OnInit {
     this.markerLayer.clearLayers();
     this.pathLayers.clearLayers();
     this.startingMarker = null;
+  }
+
+  goToSchedule(): void {
+    this.router.navigate(['/schedule'], { queryParams: { response: JSON.stringify(this.response) } });
   }
 }
 
