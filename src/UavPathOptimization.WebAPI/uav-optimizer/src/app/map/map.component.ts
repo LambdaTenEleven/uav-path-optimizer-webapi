@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { latLng, MapOptions, tileLayer, polyline, Layer, LayerGroup } from 'leaflet';
+import {latLng, MapOptions, tileLayer, polyline, Layer, LayerGroup, Control, Zoom, LatLng} from 'leaflet';
 import { Marker, marker, icon, LatLngExpression, Icon } from 'leaflet';
 import { Router } from '@angular/router';
+import ZoomOptions = Control.ZoomOptions;
 
 @Component({
   selector: 'app-map',
@@ -11,6 +12,8 @@ import { Router } from '@angular/router';
 })
 export class MapComponent implements OnInit {
   mapOptions: MapOptions = {};
+  mapZoom = 2;
+  mapCenter: LatLng = new LatLng(0, 0);
   markerLayer: LayerGroup = new LayerGroup();
   pathLayers: LayerGroup = new LayerGroup();
   uavCount = 1;
@@ -29,9 +32,13 @@ export class MapComponent implements OnInit {
           attribution: '&copy; OpenStreetMap contributors'
         })
       ],
-      zoom: 2,
+      zoom: this.mapZoom,
       center: latLng(0, 0)
     };
+
+    console.log("Map options:", this.mapOptions);
+
+    this.loadMapState();
   }
 
   createMarkerIcon(isStartingMarker: boolean): Icon {
@@ -59,14 +66,23 @@ export class MapComponent implements OnInit {
       draggable: true
     });
 
-    newMarker.on('dragend', (event: any) => {
+    this.markerLayer.addLayer(newMarker);
+    this.coordinates.push({ latitude, longitude });
+    this.updateStartingMarker();
+
+    this.attachMarkerEventListeners(newMarker);
+  }
+
+  attachMarkerEventListeners(marker: Marker): void {
+    // Attach event listeners only when the marker is created
+    marker.on('dragend', (event: any) => {
       const marker = event.target;
       const position = marker.getLatLng();
       const index = this.markerLayer.getLayers().indexOf(marker);
       this.coordinates[index] = { latitude: position.lat, longitude: position.lng };
     });
 
-    newMarker.on('click', (event: any) => {
+    marker.on('click', (event: any) => {
       const marker = event.target;
       const index = this.markerLayer.getLayers().indexOf(marker);
 
@@ -79,10 +95,6 @@ export class MapComponent implements OnInit {
         }
       }
     });
-
-    this.markerLayer.addLayer(newMarker);
-    this.coordinates.push({ latitude, longitude });
-    this.updateStartingMarker();
   }
 
   updateStartingMarker(): void {
@@ -104,6 +116,7 @@ export class MapComponent implements OnInit {
 
   onMapClick(event: any): void {
     this.addMarker(event.latlng.lat, event.latlng.lng);
+    this.saveMapState();
   }
 
   optimizePath(): void {
@@ -121,6 +134,7 @@ export class MapComponent implements OnInit {
         this.errorMessage = '';
       }
     );
+    this.saveMapState();
   }
 
   drawPaths(): void {
@@ -154,10 +168,40 @@ export class MapComponent implements OnInit {
     this.markerLayer.clearLayers();
     this.pathLayers.clearLayers();
     this.startingMarker = null;
+    this.saveMapState();
   }
 
   goToSchedule(): void {
+    this.saveMapState();
     this.router.navigate(['/schedule'], { queryParams: { response: JSON.stringify(this.response) } });
+  }
+
+  saveMapState(): void {
+    const mapState = {
+      coordinates: this.coordinates,
+      response: this.response,
+      zoom: this.mapZoom,
+      center: this.mapCenter,
+    };
+    localStorage.setItem('mapState', JSON.stringify(mapState));
+  }
+
+  loadMapState(): void {
+    const savedMapState = localStorage.getItem('mapState');
+    if (savedMapState) {
+      const mapState = JSON.parse(savedMapState);
+      console.log("Loading map state:", mapState);
+
+      this.mapZoom = mapState.zoom;
+      this.mapCenter = mapState.center;
+
+      for(const coordinate of mapState.coordinates) {
+        console.log("Adding marker:", coordinate.latitude, coordinate.longitude);
+        this.addMarker(coordinate.latitude, coordinate.longitude);
+      }
+      this.response = mapState.response;
+      this.drawPaths();
+    }
   }
 }
 

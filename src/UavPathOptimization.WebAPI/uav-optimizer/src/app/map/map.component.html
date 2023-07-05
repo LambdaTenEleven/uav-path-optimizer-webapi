@@ -1,7 +1,7 @@
 <div class="row">
   <h2>Path optimization</h2>
   <div class="col-md-9">
-    <div leaflet [leafletOptions]="mapOptions" [leafletLayers]="[markerLayer, pathLayers]" id="map" (leafletClick)="onMapClick($event)"></div>
+    <div leaflet [leafletOptions]="mapOptions" [leafletLayers]="[markerLayer, pathLayers]" [(leafletZoom)]="mapZoom" [(leafletCenter)]="mapCenter" id="map" (leafletClick)="onMapClick($event)"></div>
   </div>
   <div class="col-md-3">
     <div>
