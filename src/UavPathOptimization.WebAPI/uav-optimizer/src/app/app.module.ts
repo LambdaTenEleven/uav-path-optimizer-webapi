@@ -8,20 +8,24 @@ import { MapComponent } from './map/map.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ScheduleComponent } from './schedule/schedule.component';
+import { UavModelDropdownComponent } from './uav-model-dropdown/uav-model-dropdown.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     ScheduleComponent,
+    UavModelDropdownComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    LeafletModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        LeafletModule,
+        NgSelectModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

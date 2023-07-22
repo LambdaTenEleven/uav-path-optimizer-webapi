@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-schedule',
@@ -9,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ScheduleComponent implements OnInit {
   pathResponse: any;
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(private activatedRoute: ActivatedRoute, private apiService : ApiService) {}
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
@@ -19,4 +20,5 @@ export class ScheduleComponent implements OnInit {
       }
     });
   }
+
 }

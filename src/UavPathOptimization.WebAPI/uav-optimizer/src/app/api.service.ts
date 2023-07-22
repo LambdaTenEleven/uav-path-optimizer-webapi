@@ -14,4 +14,16 @@ export class ApiService {
     const payload = { uavCount, coordinates };
     return this.http.post<any>(`${this.baseUrl}/optimize_path`, payload);
   }
+
+  getUavModels(pageNumber: number, pageSize: number, keyword: string, sortField: string, sortDirection: number) {
+    const params = {
+      Page: pageNumber.toString(),
+      Size: pageSize.toString(),
+      Keyword: keyword,
+      SortField: sortField,
+      SortDirection: sortDirection
+    };
+
+    return this.http.get<any>(this.baseUrl + '/uav_model', { params });
+  }
 }

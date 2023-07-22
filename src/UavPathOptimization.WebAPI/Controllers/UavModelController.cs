@@ -26,7 +26,7 @@ public class UavModelController : ApiController
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UavModelResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateUavModel([FromBody] CreateUavModelRequest request)
     {
@@ -40,7 +40,7 @@ public class UavModelController : ApiController
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UavModelResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUavModel([FromRoute] Guid id)
     {
@@ -53,7 +53,7 @@ public class UavModelController : ApiController
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResultPage<UavModelResponse>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetUavModelsPage([FromQuery] GetUavModelsPageRequest request)
     {

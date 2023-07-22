@@ -1,3 +1,8 @@
+<app-uav-model-dropdown
+  (selectedUavModelEvent)="1"
+  [pageSize]="10">
+</app-uav-model-dropdown>
+
 <div *ngIf="pathResponse">
   <h2>Schedule</h2>
   <ng-container *ngFor="let path of pathResponse.uavPaths; let uavIndex = index">

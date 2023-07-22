@@ -1,0 +1,17 @@
+<ng-select
+   [items]="uavModels"
+   bindLabel="name"
+   bindValue="id"
+   placeholder="Select UAV model"
+   [searchable]="true"
+   [clearable]="false"
+   [(ngModel)]="selectedUavModel"
+   [virtualScroll]="true"
+   [loading]="loading"
+   [editableSearchTerm]="true"
+   [typeahead]="typeahead"
+   (scrollToEnd)="scrollToEnd()"
+   (open)="open()"
+   (close)="close()"
+   (search)="search()">
+</ng-select>

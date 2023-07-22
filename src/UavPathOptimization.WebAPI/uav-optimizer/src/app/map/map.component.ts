@@ -3,7 +3,6 @@ import { ApiService } from '../api.service';
 import {latLng, MapOptions, tileLayer, polyline, Layer, LayerGroup, Control, Zoom, LatLng} from 'leaflet';
 import { Marker, marker, icon, LatLngExpression, Icon } from 'leaflet';
 import { Router } from '@angular/router';
-import ZoomOptions = Control.ZoomOptions;
 
 @Component({
   selector: 'app-map',
