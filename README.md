@@ -8,11 +8,16 @@ The UAV Path Optimization project is an API-based solution that focuses on solvi
 
 - [x] API endpoint for solving VRP and TSP problems
 - [ ] API endpoint for creating schedules for UAVs
-- [x] User authorization and authentication endpoints
+- [ ] User authorization and authentication endpoints
+- [ ] Angular application for interacting with the API
 
 ## Architecture
 
-TODO Describe the architecture of the project
+The project is built following the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) principles. The main components of the architecture are:
+* **[Domain](src/UavPathOptimization.Domain)** - contains the domain entities, contracts, events, interfaces and errors
+* **[WebApi](src/UavPathOptimization.WebAPI)** - presentation layer, contains the API controllers and the API models
+* **[Application](src/UavPathOptimization.Application)** - contains the application logic and use cases
+* **[Infrastructure](src/UavPathOptimization.Infrastructure)** - contains the implementation of the application interfaces and the external dependencies
 
 ## Technologies used
 
@@ -32,7 +37,7 @@ TODO Describe the usage of the project
 
 ## API Documentation
 
-TODO Link to the API documentation
+The documentation is available here: [Docs]()
 
 ## Testing
 
