@@ -1,12 +1,12 @@
-<app-uav-model-dropdown
-  (selectedUavModelEvent)="selectedUavModelEvent($event)"
-  [pageSize]="10">
-</app-uav-model-dropdown>
-
 <div *ngIf="pathResponse">
   <h2>Schedule</h2>
+  <p>Please, review the formed paths and select a UAV for each one.</p>
   <ng-container *ngFor="let path of pathResponse.uavPaths; let uavIndex = index">
     <h3>UAV ID: {{ path.uavId }}</h3>
+    <app-uav-model-dropdown
+      (selectedUavModelEvent)="selectedUavModelEvent($event, uavIndex)"
+      [pageSize]="10">
+    </app-uav-model-dropdown>
     <table class="table">
       <thead>
         <tr>

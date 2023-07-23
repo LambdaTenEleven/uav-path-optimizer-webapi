@@ -9,7 +9,7 @@ import {ApiService} from "../api.service";
 })
 export class ScheduleComponent implements OnInit {
   pathResponse: any;
-
+  selectedUavModels: any[] = [];
   constructor(private activatedRoute: ActivatedRoute, private apiService : ApiService) {}
 
   ngOnInit(): void {
@@ -17,11 +17,13 @@ export class ScheduleComponent implements OnInit {
       if (params && params['response']) {
         this.pathResponse = JSON.parse(params['response']);
         console.log("Response:", this.pathResponse);
+        this.selectedUavModels = new Array(this.pathResponse.uavPaths.length);
       }
     });
   }
 
-  selectedUavModelEvent(event: any) {
-    console.log("Selected UAV model:", event);
+  selectedUavModelEvent(event: any, index: number) {
+    this.selectedUavModels[index] = event;
+    console.log("Selected UAV models:", this.selectedUavModels);
   }
 }
