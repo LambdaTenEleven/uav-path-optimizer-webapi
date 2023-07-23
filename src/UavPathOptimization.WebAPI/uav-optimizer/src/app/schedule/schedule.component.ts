@@ -21,4 +21,7 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
+  selectedUavModelEvent(event: any) {
+    console.log("Selected UAV model:", event);
+  }
 }

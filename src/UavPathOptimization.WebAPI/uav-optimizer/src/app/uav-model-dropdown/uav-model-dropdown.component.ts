@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../api.service';
-import {Subject} from "rxjs";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-uav-model-dropdown',
@@ -18,12 +18,12 @@ export class UavModelDropdownComponent implements OnInit {
   selectedUavModel: any;
   typeahead: Subject<string> = new Subject<string>();
   searchKeyword: string = '';
+  firstOpen: boolean = true;
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
-    //this.loadUavModels();
-    this.typeahead.subscribe( (text) => {
+    this.typeahead.subscribe((text) => {
       this.searchKeyword = text;
       console.log("Search keyword:", this.searchKeyword);
     });
@@ -36,8 +36,13 @@ export class UavModelDropdownComponent implements OnInit {
         console.log("UAV models response:", response)
         this.loading = false;
 
-        for (const element of response.items) {
-          this.uavModels = [...this.uavModels, element];
+        if (this.firstOpen) {
+          this.uavModels = response.items;
+          this.firstOpen = false;
+        } else {
+          for (const element of response.items) {
+            this.uavModels = [...this.uavModels, element];
+          }
         }
 
         this.hasNextPage = response.hasNextPage;
@@ -48,7 +53,7 @@ export class UavModelDropdownComponent implements OnInit {
   }
 
   scrollToEnd() {
-    if(this.hasNextPage) {
+    if (this.hasNextPage) {
       this.pageNumber++;
       this.loadUavModels(this.searchKeyword);
       console.log("Scrolled to the end, loading page number: ", this.pageNumber);
@@ -58,13 +63,17 @@ export class UavModelDropdownComponent implements OnInit {
   }
 
   open() {
-    if(this.hasNextPage) {
+    if (this.firstOpen || this.hasNextPage) {
       this.loadUavModels();
     }
   }
 
   close() {
     this.selectedUavModelEvent.emit(this.selectedUavModel);
+    // Clear the item list and pagination information when the dropdown is closed
+    this.uavModels = [];
+    this.pageNumber = 1;
+    this.hasNextPage = true;
   }
 
   search() {
