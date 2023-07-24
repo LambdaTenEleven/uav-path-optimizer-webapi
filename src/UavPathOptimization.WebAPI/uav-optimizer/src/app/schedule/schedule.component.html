@@ -1,27 +1,67 @@
 <div *ngIf="pathResponse">
   <h2>Schedule</h2>
   <p>Please, review the formed paths and select a UAV for each one.</p>
+  <div class="form">
+    <div class="form-group">
+      <label for="departureTime">Departure time</label>
+      <input class="form-control" type="datetime-local" id="departureTime" [(ngModel)]="departureTime" required>
+    </div>
+    <div class="form-group">
+      <label for="monitoringTime">Monitoring time</label>
+      <input class="form-control" type="time" id="monitoringTime" [(ngModel)]="monitoringTime" value="00:05:00" step="1">
+    </div>
+    <div class="form-group">
+      <label for="chargingTime">Charging time</label>
+      <input class="form-control" type="time" id="chargingTime" [(ngModel)]="chargingTime" value="00:05:00" step="1">
+    </div>
+    <br>
+    <button class="btn btn-primary" type="button" (click)="getSchedules()">Get schedule</button>
+  </div>
+  <br>
+
   <ng-container *ngFor="let path of pathResponse.uavPaths; let uavIndex = index">
-    <h3>UAV ID: {{ path.uavId }}</h3>
+    <h3>Path ID: {{ path.uavId }}</h3>
     <app-uav-model-dropdown
       (selectedUavModelEvent)="selectedUavModelEvent($event, uavIndex)"
       [pageSize]="10">
     </app-uav-model-dropdown>
-    <table class="table">
+    <table class="table" *ngIf="schedules">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Latitude</th>
-          <th>Longitude</th>
+          <th>Location</th>
+          <th>PBR</th>
+          <th>Arrival Time</th>
+          <th>Departure Time</th>
+          <th>Time Spent</th>
+          <th>Battery Time Left</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let coordinate of path.path; let rowIndex = index">
-          <td>{{ rowIndex + 1 }}</td>
-          <td>{{ coordinate.latitude }}</td>
-          <td>{{ coordinate.longitude }}</td>
+        <tr *ngFor="let entry of schedules[uavIndex]?.uavScheduleEntries">
+          <td>{{ entry.location.latitude }}, {{ entry.location.longitude }}</td>
+          <td>{{ entry.isPBR }}</td>
+          <td>{{ entry.arrivalTime }}</td>
+          <td>{{ entry.departureTime }}</td>
+          <td>{{ entry.timeSpent }}</td>
+          <td>{{ entry.batteryTimeLeft }}</td>
         </tr>
       </tbody>
     </table>
+<!--    <table class="table">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th>#</th>-->
+<!--        <th>Latitude</th>-->
+<!--        <th>Longitude</th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <tr *ngFor="let coordinate of path.path; let rowIndex = index">-->
+<!--        <td>{{ rowIndex + 1 }}</td>-->
+<!--        <td>{{ coordinate.latitude }}</td>-->
+<!--        <td>{{ coordinate.longitude }}</td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
   </ng-container>
 </div>

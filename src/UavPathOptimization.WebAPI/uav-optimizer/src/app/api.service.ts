@@ -26,4 +26,17 @@ export class ApiService {
 
     return this.http.get<any>(this.baseUrl + '/uav_model', { params });
   }
+
+  getSchedule(uavModelId: string, path: [], departureTimeStart: string, monitoringTime: string, chargingTime: string, abrasSpeed : number) {
+    const payload = {
+      UavModelId: uavModelId,
+      Path: path,
+      DepartureTimeStart: departureTimeStart,
+      MonitoringTime: monitoringTime,
+      ChargingTime: chargingTime,
+      AbrasSpeed: abrasSpeed
+    };
+
+    return this.http.post<any>(this.baseUrl + '/schedule', payload);
+  }
 }
