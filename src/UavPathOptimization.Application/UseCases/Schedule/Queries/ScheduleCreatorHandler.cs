@@ -36,7 +36,7 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
         {
             Location = request.Path[0],
             IsPBR = false,
-            ArrivalTime = request.DepartureTimeStart,
+            ArrivalTime = null,
             DepartureTime = request.DepartureTimeStart,
             TimeSpent = TimeSpan.Zero,
             BatteryTimeLeft = uav.Value.MaxFlightTime
@@ -54,7 +54,16 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
                 return Errors.UavModelErrors.UavModelMaxFlightTimeExceeded;
             }
 
-            var arrivalTime = scheduleUAV[i - 1].ArrivalTime + flightTime + scheduleUAV[i - 1].TimeSpent;
+            var arrivalTime = new DateTime();
+            if (scheduleUAV[i - 1].ArrivalTime is null)
+            {
+                arrivalTime = (DateTime)(scheduleUAV[i - 1].DepartureTime! + flightTime + scheduleUAV[i - 1].TimeSpent);
+            }
+            else
+            {
+                arrivalTime = (DateTime)(scheduleUAV[i - 1].ArrivalTime! + flightTime + scheduleUAV[i - 1].TimeSpent);
+            }
+
             var isPBR = false;
             var timeLeft = scheduleUAV[i - 1].BatteryTimeLeft - request.MonitoringTime - flightTime;
 
@@ -91,14 +100,15 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
 
         var arrival = scheduleUAV.Last().DepartureTime + flightTimeToDH;
 
+        var timeLeftLast = scheduleUAV.Last().BatteryTimeLeft - request.MonitoringTime - flightTimeToDH;
         var endPoint = new UavScheduleEntry
         {
             Location = request.Path[0],
             IsPBR = false,
             ArrivalTime = arrival,
-            DepartureTime = DateTime.MaxValue,
+            DepartureTime = null,
             TimeSpent = TimeSpan.Zero,
-            BatteryTimeLeft = scheduleUAV.Last().BatteryTimeLeft
+            BatteryTimeLeft = timeLeftLast
         };
 
         scheduleUAV.Add(endPoint);

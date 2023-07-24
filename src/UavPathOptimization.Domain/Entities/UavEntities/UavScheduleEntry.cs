@@ -22,9 +22,9 @@ public record UavScheduleEntry
 
     public bool IsPBR { get; set; }
 
-    public DateTime ArrivalTime { get; set; }
+    public DateTime? ArrivalTime { get; set; }
 
-    public DateTime DepartureTime { get; set; }
+    public DateTime? DepartureTime { get; set; }
 
     public TimeSpan TimeSpent { get; set; }
 
