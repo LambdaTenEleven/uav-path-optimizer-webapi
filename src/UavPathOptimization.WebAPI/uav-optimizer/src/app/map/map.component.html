@@ -14,11 +14,11 @@
       <button (click)="clearMap()" class="btn btn-danger">Clear Map</button>
       <button (click)="goToSchedule()" class="btn btn-dark">Schedule</button>
     </div>
-    <div *ngIf="response">
+    <div *ngIf="response != null">
       <h3>Paths:</h3>
       <div *ngFor="let path of response.uavPaths">
-        <div [ngStyle]="{'background-color': pathColors[path]}">
-          <span [style.background-color]="getPathColor(path)" class="path-color"></span>
+        <div>
+          <span [style.background-color]="pathColors[path.uavId]" class="path-color"></span>
           UAV ID: {{ path.uavId }}
         </div>
         <div>

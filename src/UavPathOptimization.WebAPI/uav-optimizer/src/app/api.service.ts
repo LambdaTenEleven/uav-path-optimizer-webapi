@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {GeoCoordinate} from "../models/GeoCoordinate";
+import {OptimizePathResponse} from "../models/OptimizePathResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  optimizePath(uavCount: number, coordinates: any[]): Observable<any> {
+  optimizePath(uavCount: number, coordinates: GeoCoordinate[]): Observable<OptimizePathResponse> {
     const payload = { uavCount, coordinates };
     return this.http.post<any>(`${this.baseUrl}/optimize_path`, payload);
   }

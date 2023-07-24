@@ -3,6 +3,8 @@ import { ApiService } from '../api.service';
 import {latLng, MapOptions, tileLayer, polyline, Layer, LayerGroup, Control, Zoom, LatLng} from 'leaflet';
 import { Marker, marker, icon, LatLngExpression, Icon } from 'leaflet';
 import { Router } from '@angular/router';
+import {GeoCoordinate} from "../../models/GeoCoordinate";
+import {OptimizePathResponse} from "../../models/OptimizePathResponse";
 
 @Component({
   selector: 'app-map',
@@ -16,8 +18,8 @@ export class MapComponent implements OnInit {
   markerLayer: LayerGroup = new LayerGroup();
   pathLayers: LayerGroup = new LayerGroup();
   uavCount = 1;
-  coordinates: { latitude: number; longitude: number }[] = [];
-  response: any;
+  coordinates: GeoCoordinate[] = [];
+  response: OptimizePathResponse | null = null;
   pathColors: string[] = [];
   errorMessage = '';
   startingMarker: Marker | null = null;
@@ -66,7 +68,7 @@ export class MapComponent implements OnInit {
     });
 
     this.markerLayer.addLayer(newMarker);
-    this.coordinates.push({ latitude, longitude });
+    this.coordinates.push(new GeoCoordinate(latitude, longitude));
     this.updateStartingMarker();
 
     this.attachMarkerEventListeners(newMarker);
@@ -78,7 +80,7 @@ export class MapComponent implements OnInit {
       const marker = event.target;
       const position = marker.getLatLng();
       const index = this.markerLayer.getLayers().indexOf(marker);
-      this.coordinates[index] = { latitude: position.lat, longitude: position.lng };
+      this.coordinates[index] = new GeoCoordinate(position.lat, position.lng);
     });
 
     marker.on('click', (event: any) => {
@@ -137,7 +139,7 @@ export class MapComponent implements OnInit {
   }
 
   drawPaths(): void {
-    this.response.uavPaths.forEach((path: any) => {
+    this.response?.uavPaths.forEach((path: any) => {
       const latLngs = path.path.map((point: any) => [point.latitude, point.longitude]);
       const color = getRandomColor();
       this.pathColors.push(color);
@@ -153,11 +155,6 @@ export class MapComponent implements OnInit {
   clearPaths(): void {
     this.pathColors = [];
     this.pathLayers.clearLayers();
-  }
-
-  getPathColor(path: any): string {
-    const index = this.response.uavPaths.indexOf(path);
-    return this.pathColors[index];
   }
 
   clearMap(): void {
