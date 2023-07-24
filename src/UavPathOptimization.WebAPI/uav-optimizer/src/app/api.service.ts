@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {GeoCoordinate} from "../models/GeoCoordinate";
 import {OptimizePathResponse} from "../models/OptimizePathResponse";
+import {Page} from "../models/Page";
+import {UavModel} from "../models/UavModel";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ export class ApiService {
     return this.http.post<any>(`${this.baseUrl}/optimize_path`, payload);
   }
 
-  getUavModels(pageNumber: number, pageSize: number, keyword: string, sortField: string, sortDirection: number) {
+  getUavModels(pageNumber: number, pageSize: number, keyword: string, sortField: string, sortDirection: number) : Observable<Page<UavModel>> {
     const params = {
       Page: pageNumber.toString(),
       Size: pageSize.toString(),

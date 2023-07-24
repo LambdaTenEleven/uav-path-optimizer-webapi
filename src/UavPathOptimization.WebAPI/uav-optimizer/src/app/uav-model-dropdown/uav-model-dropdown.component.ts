@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Subject } from "rxjs";
+import {UavModel} from "../../models/UavModel";
 
 @Component({
   selector: 'app-uav-model-dropdown',
@@ -11,11 +12,11 @@ export class UavModelDropdownComponent implements OnInit {
   @Output() selectedUavModelEvent: EventEmitter<any> = new EventEmitter<any>();
   @Input() pageSize = 10;
 
-  uavModels: any[] = [];
+  uavModels: UavModel[] = [];
   pageNumber = 1;
   hasNextPage: boolean = true;
   loading: boolean = false;
-  selectedUavModel: any;
+  selectedUavModel: UavModel | null = null;
   typeahead: Subject<string> = new Subject<string>();
   searchKeyword: string = '';
   firstOpen: boolean = true;
