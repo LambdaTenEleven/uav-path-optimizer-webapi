@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ApiService } from '../api.service';
-import { Subject } from "rxjs";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ApiService} from '../api.service';
+import {Subject} from "rxjs";
 import {UavModel} from "../../models/UavModel";
+import {SortDirection} from "../../models/SortDirection";
 
 @Component({
   selector: 'app-uav-model-dropdown',
@@ -32,7 +33,7 @@ export class UavModelDropdownComponent implements OnInit {
 
   loadUavModels(keyword: string = '') {
     this.loading = true;
-    this.apiService.getUavModels(this.pageNumber, this.pageSize, keyword, 'Name', 0).subscribe(
+    this.apiService.getUavModels(this.pageNumber, this.pageSize, keyword, 'Name', SortDirection.Ascending).subscribe(
       response => {
         console.log("UAV models response:", response)
         this.loading = false;

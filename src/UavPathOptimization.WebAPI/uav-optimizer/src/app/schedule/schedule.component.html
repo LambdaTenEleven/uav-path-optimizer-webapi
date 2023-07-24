@@ -25,7 +25,7 @@
       (selectedUavModelEvent)="selectedUavModelEvent($event, uavIndex)"
       [pageSize]="10">
     </app-uav-model-dropdown>
-    <table class="table" *ngIf="schedules">
+    <table class="table" *ngIf="schedules.length != 0">
       <thead>
         <tr>
           <th>Location</th>
@@ -40,8 +40,8 @@
         <tr *ngFor="let entry of schedules[uavIndex]?.uavScheduleEntries">
           <td>{{ entry.location.latitude }}, {{ entry.location.longitude }}</td>
           <td>{{ entry.isPBR }}</td>
-          <td>{{ entry.arrivalTime }}</td>
-          <td>{{ entry.departureTime }}</td>
+          <td>{{ entry.getArrivalTimeFormatted() }}</td>
+          <td>{{ entry.getDepartureTimeFormatted() }}</td>
           <td>{{ entry.timeSpent }}</td>
           <td>{{ entry.batteryTimeLeft }}</td>
         </tr>

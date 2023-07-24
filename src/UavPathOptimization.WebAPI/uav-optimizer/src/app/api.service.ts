@@ -5,6 +5,8 @@ import {GeoCoordinate} from "../models/GeoCoordinate";
 import {OptimizePathResponse} from "../models/OptimizePathResponse";
 import {Page} from "../models/Page";
 import {UavModel} from "../models/UavModel";
+import {SortDirection} from "../models/SortDirection";
+import {ScheduleResponse} from "../models/ScheduleResponse";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,7 @@ export class ApiService {
     return this.http.post<any>(`${this.baseUrl}/optimize_path`, payload);
   }
 
-  getUavModels(pageNumber: number, pageSize: number, keyword: string, sortField: string, sortDirection: number) : Observable<Page<UavModel>> {
+  getUavModels(pageNumber: number, pageSize: number, keyword: string, sortField: string, sortDirection: SortDirection) : Observable<Page<UavModel>> {
     const params = {
       Page: pageNumber.toString(),
       Size: pageSize.toString(),
@@ -31,7 +33,7 @@ export class ApiService {
     return this.http.get<any>(this.baseUrl + '/uav_model', { params });
   }
 
-  getSchedule(uavModelId: string, path: [], departureTimeStart: string, monitoringTime: string, chargingTime: string, abrasSpeed : number) {
+  getSchedule(uavModelId: string, path: GeoCoordinate[], departureTimeStart: string, monitoringTime: string, chargingTime: string, abrasSpeed : number) : Observable<ScheduleResponse> {
     const payload = {
       UavModelId: uavModelId,
       Path: path,
