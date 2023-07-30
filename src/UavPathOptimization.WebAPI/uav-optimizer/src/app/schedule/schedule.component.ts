@@ -18,6 +18,8 @@ export class ScheduleComponent implements OnInit {
   monitoringTime: string = '';
   chargingTime: string = '';
 
+  scheduleLoading: boolean = false;
+
   constructor(private activatedRoute: ActivatedRoute, private apiService: ApiService) {
   }
 
@@ -46,6 +48,7 @@ export class ScheduleComponent implements OnInit {
   getSchedule(id: number) {
     console.log("Selected UAV Model:", this.selectedUavModelsIds[id])
     console.log("Selected UAV Path:", this.pathResponse.uavPaths[id].path)
+    this.scheduleLoading = true;
     this.apiService.getSchedule(this.selectedUavModelsIds[id], this.pathResponse.uavPaths[id].path, this.departureTime, this.monitoringTime, this.chargingTime, 0).subscribe((response: ScheduleResponse) => {
       // for some reason, the response is not parsed as a ScheduleResponse object
       let uavScheduleEntries: UavScheduleEntry[] = new Array(response.uavScheduleEntries.length);
@@ -59,6 +62,7 @@ export class ScheduleComponent implements OnInit {
           response.uavScheduleEntries[i].batteryTimeLeft);
       }
       this.schedules[id] = new ScheduleResponse(response.uavModelId, uavScheduleEntries);
+      this.scheduleLoading = false;
       console.log("Schedule:", this.schedules[id]);
     });
   }

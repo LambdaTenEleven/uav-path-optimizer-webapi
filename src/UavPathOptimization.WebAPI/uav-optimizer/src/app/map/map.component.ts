@@ -24,6 +24,8 @@ export class MapComponent implements OnInit {
   errorMessage = '';
   startingMarker: Marker | null = null;
 
+  pathLoading = false;
+
   constructor(private apiService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
@@ -121,11 +123,13 @@ export class MapComponent implements OnInit {
   }
 
   optimizePath(): void {
+    this.pathLoading = true;
     this.clearPaths();
     this.apiService.optimizePath(this.uavCount, this.coordinates).subscribe(
       (response) => {
         this.response = response;
         this.drawPaths();
+        this.pathLoading = false;
       },
       (error) => {
         for (const key in error.error.errors) {
@@ -133,8 +137,10 @@ export class MapComponent implements OnInit {
         }
         alert(this.errorMessage);
         this.errorMessage = '';
+        this.pathLoading = false;
       }
     );
+
     this.saveMapState();
   }
 

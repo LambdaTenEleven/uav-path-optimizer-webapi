@@ -10,7 +10,11 @@
         <label for="uavCount">Number of UAVs:</label>
         <input type="number" id="uavCount" [(ngModel)]="uavCount" name="uavCount" class="form-control">
       </p>
-      <button (click)="optimizePath()" class="btn btn-primary">Optimize Path</button>
+      <button *ngIf="!pathLoading" (click)="optimizePath()" class="btn btn-primary">Optimize Path</button>
+      <button *ngIf="pathLoading" class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
       <button (click)="clearMap()" class="btn btn-danger">Clear Map</button>
       <button (click)="goToSchedule()" class="btn btn-dark">Schedule</button>
     </div>

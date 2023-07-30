@@ -13,12 +13,12 @@ export class ScheduleResponse {
 export class UavScheduleEntry {
   location: GeoCoordinate;
   isPBR: boolean;
-  arrivalTime: string;
-  departureTime: string;
+  arrivalTime: string | null;
+  departureTime: string | null;
   timeSpent: string;
   batteryTimeLeft: string;
 
-  constructor(location: GeoCoordinate, isPBR: boolean, arrivalTime: string, departureTime: string, timeSpent: string, batteryTimeLeft: string) {
+  constructor(location: GeoCoordinate, isPBR: boolean, arrivalTime: string | null, departureTime: string | null, timeSpent: string, batteryTimeLeft: string) {
     this.location = location;
     this.isPBR = isPBR;
     this.timeSpent = timeSpent;
@@ -38,10 +38,16 @@ export class UavScheduleEntry {
   };
 
   getArrivalTimeFormatted(): string {
+    if(this.arrivalTime == null) {
+      return '';
+    }
     return new Date(this.arrivalTime).toLocaleString('uk-UA', this.dateFormatOptions);
   }
 
   getDepartureTimeFormatted(): string {
+    if(this.departureTime == null) {
+      return '';
+    }
     return new Date(this.departureTime).toLocaleString('uk-UA', this.dateFormatOptions);
   }
 }

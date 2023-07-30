@@ -54,7 +54,7 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
                 return Errors.UavModelErrors.UavModelMaxFlightTimeExceeded;
             }
 
-            var arrivalTime = new DateTime();
+            DateTime arrivalTime;
             if (scheduleUAV[i - 1].ArrivalTime is null)
             {
                 arrivalTime = (DateTime)(scheduleUAV[i - 1].DepartureTime! + flightTime + scheduleUAV[i - 1].TimeSpent);
@@ -93,7 +93,7 @@ public class ScheduleCreatorHandler : IRequestHandler<ScheduleCreatorQuery, Erro
         var distanceToDH = _distanceCalculator.CalculateDistance(request.Path[0], scheduleUAV.Last().Location);
         var flightTimeToDH = (distanceToDH / uav.Value.MaxSpeed).ToTimeSpan();
 
-        if(flightTimeToDH + request.MonitoringTime > uav.Value.MaxFlightTime)
+        if (flightTimeToDH + request.MonitoringTime > uav.Value.MaxFlightTime)
         {
             return Errors.UavModelErrors.UavModelMaxFlightTimeExceeded;
         }
