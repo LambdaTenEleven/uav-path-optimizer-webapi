@@ -2,9 +2,4 @@
 
 namespace UavPathOptimization.Domain.Entities.Results;
 
-public class UavScheduleResult
-{
-    public Guid UavModelId { get; set; }
-
-    public IList<UavScheduleEntry> UavScheduleEntries { get; set; } = null!;
-}
+public record UavScheduleResult(IList<UavPathSchedule> UavPathSchedules, IList<UavScheduleEntry> AbrasScheduleEntries);

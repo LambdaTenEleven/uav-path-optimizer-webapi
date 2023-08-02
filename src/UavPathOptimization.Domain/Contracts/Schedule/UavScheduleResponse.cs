@@ -1,8 +1,8 @@
-﻿using UavPathOptimization.Domain.Entities.UavEntities;
+﻿using UavPathOptimization.Domain.Entities.Results;
+using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Domain.Contracts.Schedule;
 
 public record UavScheduleResponse(
-    Guid UavModelId,
-    IList<UavScheduleEntry> UavScheduleEntries
+    IList<UavPathSchedule> UavPathSchedules, IList<UavScheduleEntry> AbrasScheduleEntries
 );

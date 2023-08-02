@@ -7,6 +7,7 @@ import {Page} from "../models/Page";
 import {UavModel} from "../models/UavModel";
 import {SortDirection} from "../models/SortDirection";
 import {ScheduleResponse} from "../models/ScheduleResponse";
+import {UavPath} from "../models/UavPath";
 
 @Injectable({
   providedIn: 'root'
@@ -33,10 +34,9 @@ export class ApiService {
     return this.http.get<any>(this.baseUrl + '/uav_model', { params });
   }
 
-  getSchedule(uavModelId: string, path: GeoCoordinate[], departureTimeStart: string, monitoringTime: string, chargingTime: string, abrasSpeed : number) : Observable<ScheduleResponse> {
+  getSchedule(uavPaths: UavPath[], departureTimeStart: string, monitoringTime: string, chargingTime: string, abrasSpeed : number) : Observable<ScheduleResponse> {
     const payload = {
-      UavModelId: uavModelId,
-      Path: path,
+      Paths: uavPaths,
       DepartureTimeStart: departureTimeStart,
       MonitoringTime: monitoringTime,
       ChargingTime: chargingTime,

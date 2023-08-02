@@ -1,6 +1,17 @@
 ﻿import {GeoCoordinate} from "./GeoCoordinate";
 
+
 export class ScheduleResponse {
+  uavPathSchedules: SchedulePath[];
+  abrasScheduleEntries: UavScheduleEntry[];
+
+  constructor(uavPathSchedules: SchedulePath[], abrasScheduleEntries: UavScheduleEntry[]) {
+    this.uavPathSchedules = uavPathSchedules;
+    this.abrasScheduleEntries = abrasScheduleEntries;
+  }
+}
+
+export class SchedulePath {
   uavModelId: string;
   uavScheduleEntries: UavScheduleEntry[];
 

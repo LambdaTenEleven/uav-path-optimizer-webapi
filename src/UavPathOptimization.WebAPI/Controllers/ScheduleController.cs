@@ -26,7 +26,7 @@ public class ScheduleController : ApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([FromBody] UavScheduleRequest request)
     {
-        var query = _mapper.Map<ScheduleCreatorQuery>(request);
+        var query = _mapper.Map<CreateScheduleQuery>(request);
         var result = await _mediator.Send(query);
 
         return result.Match(

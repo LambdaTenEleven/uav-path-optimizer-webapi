@@ -12,7 +12,7 @@ import {ScheduleResponse, UavScheduleEntry} from "../../models/ScheduleResponse"
 export class ScheduleComponent implements OnInit {
   pathResponse: any;
   selectedUavModelsIds: string[] = [];
-  schedules: ScheduleResponse[] = [];
+  schedule: ScheduleResponse | null = null;
 
   departureTime: string = '';
   monitoringTime: string = '';
@@ -29,7 +29,6 @@ export class ScheduleComponent implements OnInit {
         this.pathResponse = JSON.parse(params['response']);
         console.log("Response:", this.pathResponse);
         this.selectedUavModelsIds = new Array(this.pathResponse.uavPaths.length);
-        this.schedules = new Array(this.pathResponse.uavPaths.length);
       }
     });
   }
@@ -40,30 +39,29 @@ export class ScheduleComponent implements OnInit {
   }
 
   getSchedules() {
-    for (let i = 0; i < this.pathResponse.uavPaths.length; i++) {
-      this.getSchedule(i);
-    }
-  }
-
-  getSchedule(id: number) {
-    console.log("Selected UAV Model:", this.selectedUavModelsIds[id])
-    console.log("Selected UAV Path:", this.pathResponse.uavPaths[id].path)
     this.scheduleLoading = true;
-    this.apiService.getSchedule(this.selectedUavModelsIds[id], this.pathResponse.uavPaths[id].path, this.departureTime, this.monitoringTime, this.chargingTime, 0).subscribe((response: ScheduleResponse) => {
-      // for some reason, the response is not parsed as a ScheduleResponse object
-      let uavScheduleEntries: UavScheduleEntry[] = new Array(response.uavScheduleEntries.length);
-      for(let i = 0; i < response.uavScheduleEntries.length; i++) {
-        uavScheduleEntries[i] = new UavScheduleEntry(
-          response.uavScheduleEntries[i].location,
-          response.uavScheduleEntries[i].isPBR,
-          response.uavScheduleEntries[i].arrivalTime,
-          response.uavScheduleEntries[i].departureTime,
-          response.uavScheduleEntries[i].timeSpent,
-          response.uavScheduleEntries[i].batteryTimeLeft);
-      }
-      this.schedules[id] = new ScheduleResponse(response.uavModelId, uavScheduleEntries);
-      this.scheduleLoading = false;
-      console.log("Schedule:", this.schedules[id]);
+
+    const uavPaths = this.pathResponse.uavPaths.map((uavPath: any, index: number) => {
+        return {
+            UavModelId: this.selectedUavModelsIds[index],
+            Coordinates: uavPath.path
+        };
     });
+
+    this.apiService.getSchedule(uavPaths, this.departureTime, this.monitoringTime, this.chargingTime, this.pathResponse.abrasSpeed).subscribe((response: ScheduleResponse) => {
+        console.log("Schedule response:", response);
+        this.schedule = new ScheduleResponse(response.uavPathSchedules.map((schedulePath: any) => {
+            return {
+                uavModelId: schedulePath.uavModelId,
+                uavScheduleEntries: schedulePath.uavScheduleEntries.map((uavScheduleEntry: any) => {
+                    return new UavScheduleEntry(uavScheduleEntry.location, uavScheduleEntry.isPBR, uavScheduleEntry.arrivalTime, uavScheduleEntry.departureTime, uavScheduleEntry.timeSpent, uavScheduleEntry.batteryTimeLeft);
+                })
+            };
+        }), response.abrasScheduleEntries.map((uavScheduleEntry: any) => {
+            return new UavScheduleEntry(uavScheduleEntry.location, uavScheduleEntry.isPBR, uavScheduleEntry.arrivalTime, uavScheduleEntry.departureTime, uavScheduleEntry.timeSpent, uavScheduleEntry.batteryTimeLeft);
+        }));
+    });
+
+    this.scheduleLoading = false;
   }
 }

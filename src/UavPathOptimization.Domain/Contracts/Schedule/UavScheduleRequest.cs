@@ -1,8 +1,7 @@
 ﻿namespace UavPathOptimization.Domain.Contracts.Schedule;
 
 public record UavScheduleRequest(
-    Guid UavModelId,
-    IList<GeoCoordinateDto> Path,
+    IList<UavPathDto> Paths,
     DateTime DepartureTimeStart,
     TimeSpan MonitoringTime,
     TimeSpan ChargingTime,
