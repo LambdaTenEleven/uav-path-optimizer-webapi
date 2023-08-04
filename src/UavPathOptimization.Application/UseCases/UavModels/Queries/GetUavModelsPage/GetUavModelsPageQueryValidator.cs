@@ -4,7 +4,7 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
 
-public class GetUavModelsPageQueryValidator : AbstractValidator<GetUavModelsPageQuery>
+public sealed class GetUavModelsPageQueryValidator : AbstractValidator<GetUavModelsPageQuery>
 {
     public GetUavModelsPageQueryValidator()
     {

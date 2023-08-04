@@ -7,7 +7,7 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
 
-public class CreateUavModelCommandHandler : IRequestHandler<CreateUavModelCommand, ErrorOr<UavModel>>
+internal sealed class CreateUavModelCommandHandler : IRequestHandler<CreateUavModelCommand, ErrorOr<UavModel>>
 {
     private readonly IMediator _mediator;
 

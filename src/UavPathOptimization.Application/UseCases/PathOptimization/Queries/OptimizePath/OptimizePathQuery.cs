@@ -6,6 +6,6 @@ using UavPathOptimization.Domain.Entities.Results;
 namespace UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 
 public sealed record OptimizePathQuery(
-    int UAVCount,
+    int UavCount,
     IList<GeoCoordinateDto> Coordinates
 ) : IRequest<ErrorOr<OptimizePathResult>>;

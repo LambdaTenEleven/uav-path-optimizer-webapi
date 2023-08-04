@@ -6,7 +6,7 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
 
-public class GetUavModelsPageQueryHandler : IRequestHandler<GetUavModelsPageQuery, ErrorOr<ResultPage<UavModel>>>
+internal sealed class GetUavModelsPageQueryHandler : IRequestHandler<GetUavModelsPageQuery, ErrorOr<ResultPage<UavModel>>>
 {
     private readonly IMediator _mediator;
 

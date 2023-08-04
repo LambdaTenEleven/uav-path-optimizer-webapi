@@ -4,7 +4,7 @@ using UavPathOptimization.Application.Common.Persistence.Uav;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.DeleteUavModel;
 
-public class DeleteUavModelCommandHandler : IRequestHandler<DeleteUavModelCommand, ErrorOr<Unit>>
+internal sealed class DeleteUavModelCommandHandler : IRequestHandler<DeleteUavModelCommand, ErrorOr<Unit>>
 {
     private readonly IMediator _mediator;
 
@@ -15,7 +15,7 @@ public class DeleteUavModelCommandHandler : IRequestHandler<DeleteUavModelComman
 
     public async Task<ErrorOr<Unit>> Handle(DeleteUavModelCommand request, CancellationToken cancellationToken)
     {
-        var command = new DeleteUavModelFromDbCommand(request.id);
+        var command = new DeleteUavModelFromDbCommand(request.Id);
 
         return await _mediator.Send(command, cancellationToken);
     }

@@ -9,16 +9,9 @@ using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.PathOptimization.Queries.OptimizePath;
 
-public sealed class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
+internal sealed class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery, ErrorOr<OptimizePathResult>>
 {
-    private readonly IMapper _mapper;
-
-    public OptimizePathQueryHandler(IMapper mapper)
-    {
-        _mapper = mapper;
-    }
-
-    private const int SCALE = 100;
+    private const int Scale = 100;
 
     public Task<ErrorOr<OptimizePathResult>> Handle(OptimizePathQuery request, CancellationToken cancellationToken)
     {
@@ -33,7 +26,7 @@ public sealed class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery
         {
             for (var j = i; j < count; j++)
             {
-                var distance = (long)(path[i].GetDistanceTo(path[j]) * SCALE);
+                var distance = (long)(path[i].GetDistanceTo(path[j]) * Scale);
                 matrix[i, j] = distance;
                 matrix[j, i] = distance;
             }
@@ -41,7 +34,7 @@ public sealed class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery
 
         // Create Routing Index Manager
         var manager =
-            new RoutingIndexManager(matrix.GetLength(0), request.UAVCount, 0);
+            new RoutingIndexManager(matrix.GetLength(0), request.UavCount, 0);
 
         // Create Routing Model.
         var routing = new RoutingModel(manager);
@@ -80,7 +73,7 @@ public sealed class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery
 
         var uavPaths = new List<UAVPath>();
 
-        for (int i = 0; i < request.UAVCount; ++i)
+        for (int i = 0; i < request.UavCount; ++i)
         {
             long routeDistance = 0;
             var index = routing.Start(i);
@@ -95,7 +88,7 @@ public sealed class OptimizePathQueryHandler : IRequestHandler<OptimizePathQuery
             }
 
             uavPath.UAVId = i;
-            uavPath.Distance = (double)routeDistance / SCALE;
+            uavPath.Distance = (double)routeDistance / Scale;
             uavPaths.Add(uavPath);
         }
 

@@ -4,7 +4,7 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
 
-public record CreateUavModelCommand(
+public sealed record CreateUavModelCommand(
     string Name,
     double MaxSpeed,
     TimeSpan MaxFlightTime

@@ -9,13 +9,13 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.Schedule.Queries;
 
-public class CreateScheduleHandler : IRequestHandler<CreateScheduleQuery, ErrorOr<UavScheduleResult>>
+internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateScheduleQuery, ErrorOr<UavScheduleResult>>
 {
     private readonly IMediator _mediator;
 
     private readonly IDistanceCalculator _distanceCalculator;
 
-    public CreateScheduleHandler(IMediator mediator, IDistanceCalculator distanceCalculator)
+    public CreateScheduleQueryHandler(IMediator mediator, IDistanceCalculator distanceCalculator)
     {
         _mediator = mediator;
         _distanceCalculator = distanceCalculator;

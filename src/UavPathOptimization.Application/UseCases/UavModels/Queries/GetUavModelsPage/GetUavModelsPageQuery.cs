@@ -6,7 +6,7 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
 
-public record GetUavModelsPageQuery(
+public sealed record GetUavModelsPageQuery(
     int PageNumber,
     int PageSize,
     string? Keyword = null,

@@ -5,7 +5,7 @@ using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Application.UseCases.Schedule.Queries;
 
-public record CreateScheduleQuery(
+public sealed record CreateScheduleQuery(
     IList<UavPathDto> Paths,
     DateTime DepartureTimeStart,
     TimeSpan MonitoringTime,

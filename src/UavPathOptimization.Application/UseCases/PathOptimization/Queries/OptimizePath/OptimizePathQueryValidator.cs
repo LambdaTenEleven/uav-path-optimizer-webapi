@@ -11,7 +11,7 @@ public sealed class OptimizePathQueryValidator : AbstractValidator<OptimizePathQ
 
         RuleFor(x => x.Coordinates.Count)
             .GreaterThan(2)
-            .GreaterThan(x => x.UAVCount);
+            .GreaterThan(x => x.UavCount);
 
         RuleForEach(x => x.Coordinates)
             .ChildRules(x =>
@@ -23,7 +23,7 @@ public sealed class OptimizePathQueryValidator : AbstractValidator<OptimizePathQ
                     .InclusiveBetween(-180, 180);
             });
 
-        RuleFor(x => x.UAVCount)
+        RuleFor(x => x.UavCount)
             .GreaterThan(0);
     }
 }

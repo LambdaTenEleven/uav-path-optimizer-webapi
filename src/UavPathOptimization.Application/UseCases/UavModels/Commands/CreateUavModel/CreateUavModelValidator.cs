@@ -2,7 +2,7 @@
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.CreateUavModel;
 
-public class CreateUavModelValidator : AbstractValidator<CreateUavModelCommand>
+public sealed class CreateUavModelValidator : AbstractValidator<CreateUavModelCommand>
 {
     public CreateUavModelValidator()
     {

@@ -26,7 +26,6 @@ public class PathOptimizerController : ApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post([FromBody] OptimizePathRequest request)
     {
-        //var query = _mapper.Map<OptimizePathQuery>(request);
         var query = new OptimizePathQuery(request.UAVCount, request.Coordinates);
         var result = await _mediator.Send(query);
 

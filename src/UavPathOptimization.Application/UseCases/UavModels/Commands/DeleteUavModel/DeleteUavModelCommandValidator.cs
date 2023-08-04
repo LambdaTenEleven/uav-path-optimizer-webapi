@@ -2,11 +2,11 @@
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.DeleteUavModel;
 
-public class DeleteUavModelCommandValidator : AbstractValidator<DeleteUavModelCommand>
+public sealed class DeleteUavModelCommandValidator : AbstractValidator<DeleteUavModelCommand>
 {
     public DeleteUavModelCommandValidator()
     {
-        RuleFor(x => x.id)
+        RuleFor(x => x.Id)
             .NotNull()
             .NotEmpty();
     }

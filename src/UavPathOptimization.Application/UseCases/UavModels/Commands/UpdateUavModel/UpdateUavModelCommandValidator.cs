@@ -3,14 +3,10 @@ using MediatR;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
 
-public class UpdateUavModelCommandValidator : AbstractValidator<UpdateUavModelCommand>
+public sealed class UpdateUavModelCommandValidator : AbstractValidator<UpdateUavModelCommand>
 {
-    private readonly IMediator _mediator;
-
     public UpdateUavModelCommandValidator(IMediator mediator)
     {
-        _mediator = mediator;
-
         RuleFor(x => x.Id)
             .NotNull();
 
