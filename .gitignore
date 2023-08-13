@@ -3,6 +3,7 @@
 
 .idea/
 .vs/
+/src/UavPathOptimization.WebAPI/logs/
 
 # User-specific files
 *.suo
