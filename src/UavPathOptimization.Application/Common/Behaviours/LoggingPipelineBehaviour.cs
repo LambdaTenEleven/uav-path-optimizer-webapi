@@ -30,10 +30,10 @@ public class LoggingPipelineBehaviour<TRequest, TResponse>
         if (response is IErrorOr { IsError: true } errorOr)
         {
             _logger.LogError(
-                "Request error {@RequestName}, {@DateTimeUtc}, {@Error}",
+                "Request errors {@RequestName}, {@DateTimeUtc}, {@Errors}",
                 typeof(TRequest).Name,
                 _dateTimeProvider.UtcNow,
-                errorOr.Errors.First().Description);
+                errorOr.Errors);
         }
 
         _logger.LogInformation(
