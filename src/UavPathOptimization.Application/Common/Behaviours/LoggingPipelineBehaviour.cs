@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UavPathOptimization.Application.Common.Services;
+using UavPathOptimization.Domain.Common.LoggerDefinitions;
 
 namespace UavPathOptimization.Application.Common.Behaviours;
 
@@ -21,25 +22,15 @@ public class LoggingPipelineBehaviour<TRequest, TResponse>
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        _logger.LogInformation(
-            "Starting request {@RequestName}, {@DateTimeUtc}",
-            typeof(TRequest).Name,
-            _dateTimeProvider.UtcNow);
+        _logger.LogRequestStart(typeof(TRequest).Name, _dateTimeProvider.UtcNow);
 
         var response = await next();
         if (response is IErrorOr { IsError: true } errorOr)
         {
-            _logger.LogError(
-                "Request errors {@RequestName}, {@DateTimeUtc}, {@Errors}",
-                typeof(TRequest).Name,
-                _dateTimeProvider.UtcNow,
-                errorOr.Errors);
+            _logger.LogRequestError(nameof(LoggingPipelineBehaviour<TRequest, TResponse>), _dateTimeProvider.UtcNow, errorOr.Errors.First());
         }
 
-        _logger.LogInformation(
-            "Finished request {@RequestName}, {@DateTimeUtc}",
-            typeof(TRequest).Name,
-            _dateTimeProvider.UtcNow);
+        _logger.LogRequestEnd(typeof(TRequest).Name, _dateTimeProvider.UtcNow);
 
         return response;
     }

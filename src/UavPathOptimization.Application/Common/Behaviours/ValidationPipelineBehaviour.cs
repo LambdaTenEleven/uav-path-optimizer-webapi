@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using UavPathOptimization.Application.Common.Services;
+using UavPathOptimization.Domain.Common.LoggerDefinitions;
 
 namespace UavPathOptimization.Application.Common.Behaviours;
 
@@ -26,10 +27,7 @@ public class ValidationPipelineBehaviour<TRequest, TResponse> : IPipelineBehavio
     {
         if (_validator is null)
         {
-            _logger.LogWarning(
-                "No validator found for request {@RequestName}, {@DateTimeUtc}",
-                typeof(TRequest).Name,
-                _dateTimeProvider.UtcNow);
+            _logger.LogValidatorNotFound(typeof(TRequest).Name, _dateTimeProvider.UtcNow);
 
             return await next();
         }
@@ -41,14 +39,10 @@ public class ValidationPipelineBehaviour<TRequest, TResponse> : IPipelineBehavio
             return await next();
         }
 
-        _logger.LogError(
-            "Request validation error {@RequestName}, {@DateTimeUtc}, {@Errors}",
-            typeof(TRequest).Name,
-            _dateTimeProvider.UtcNow,
-            validationResult.Errors);
-
         var errors =
             validationResult.Errors.ConvertAll(failure => Error.Validation(failure.PropertyName, failure.ErrorMessage));
+
+        _logger.LogRequestValidationErrors(typeof(TRequest).Name, _dateTimeProvider.UtcNow, errors.First());
 
         return (dynamic)errors;
     }
