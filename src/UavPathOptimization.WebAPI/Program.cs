@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using UavPathOptimization.Application;
 using UavPathOptimization.Application.Mappers;
@@ -7,10 +9,6 @@ using UavPathOptimization.WebAPI;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
 builder.Services
     .AddWebApi(builder.Configuration)
     .AddApplication(builder.Configuration)
@@ -22,7 +20,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
-
 
 var app = builder.Build();
 
@@ -36,6 +33,12 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 
 //app.UseHttpsRedirection();
+app.MapHealthChecks("/_health", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+});
+
 app.UseCors(builder => builder
        .AllowAnyHeader()
        .AllowAnyMethod()

@@ -1,11 +1,14 @@
-﻿namespace UavPathOptimization.WebAPI;
+﻿using UavPathOptimization.Infrastructure.Common.EntityFramework;
+
+namespace UavPathOptimization.WebAPI;
 
 public static class DependencyInjection
 {
     public static IServiceCollection AddWebApi(this IServiceCollection services, ConfigurationManager builderConfiguration)
     {
-        var assembly = typeof(DependencyInjection).Assembly;
         services.AddControllers();
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>(name: "Database");
 
         return services;
     }
