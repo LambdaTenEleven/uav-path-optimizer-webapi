@@ -45,4 +45,8 @@ export class ApiService {
 
     return this.http.post<any>(this.baseUrl + '/schedule', payload);
   }
+
+  getHealth() : Observable<any> {
+    return this.http.get<any>(this.baseUrl + '/_health');
+  }
 }

@@ -10,6 +10,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { UavModelDropdownComponent } from './uav-model-dropdown/uav-model-dropdown.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     MapComponent,
     ScheduleComponent,
     UavModelDropdownComponent,
+    ErrorComponent,
   ],
     imports: [
         BrowserModule,
