@@ -1,6 +1,6 @@
 ﻿namespace UavPathOptimization.Domain.Entities.Base;
 
-public class BaseEntity
+public class Entity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 }

@@ -1,31 +1,30 @@
 ﻿using ErrorOr;
 using MediatR;
-using UavPathOptimization.Application.Common.Persistence.Uav;
 using UavPathOptimization.Domain.Common;
 using UavPathOptimization.Domain.Entities.UavEntities;
+using UavPathOptimization.Domain.Repositories;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Queries.GetUavModelsPage;
 
 internal sealed class GetUavModelsPageQueryHandler : IRequestHandler<GetUavModelsPageQuery, ErrorOr<ResultPage<UavModel>>>
 {
-    private readonly IMediator _mediator;
+    private readonly IUavModelRepository _uavModelRepository;
 
-    public GetUavModelsPageQueryHandler(IMediator mediator)
+    public GetUavModelsPageQueryHandler(IUavModelRepository uavModelRepository)
     {
-        _mediator = mediator;
+        _uavModelRepository = uavModelRepository;
     }
 
     public async Task<ErrorOr<ResultPage<UavModel>>> Handle(GetUavModelsPageQuery request, CancellationToken cancellationToken)
     {
-        var query = new GetUavModelsFromDbQuery(
+        var uavModels = await _uavModelRepository.GetPageAsync(
             request.PageNumber,
             request.PageSize,
             request.Keyword,
             request.SortField,
-            request.SortDirection
+            request.SortDirection,
+            cancellationToken
         );
-
-        var uavModels = await _mediator.Send(query, cancellationToken);
 
         return uavModels;
     }

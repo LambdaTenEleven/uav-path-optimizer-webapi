@@ -3,7 +3,7 @@ using UnitsNet;
 
 namespace UavPathOptimization.Domain.Entities.UavEntities;
 
-public class UavModel : BaseEntity
+public class UavModel : Entity
 {
     public string Name { get; set; } = null!;
 

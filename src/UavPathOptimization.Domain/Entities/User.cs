@@ -1,8 +1,9 @@
-﻿namespace UavPathOptimization.Domain.Entities;
+﻿using UavPathOptimization.Domain.Entities.Base;
 
-public class User
+namespace UavPathOptimization.Domain.Entities;
+
+public class User : Entity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
     public string UserName { get; set; } = null!;
     public string Email { get; set; } = null!;
 }

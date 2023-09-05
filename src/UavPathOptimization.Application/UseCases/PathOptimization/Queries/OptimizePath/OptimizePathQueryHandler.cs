@@ -1,7 +1,6 @@
 ﻿using ErrorOr;
 using GeoCoordinatePortable;
 using Google.OrTools.ConstraintSolver;
-using MapsterMapper;
 using MediatR;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Contracts.OptimizePath;

@@ -1,37 +1,46 @@
 ﻿using ErrorOr;
 using MapsterMapper;
 using MediatR;
-using UavPathOptimization.Application.Common.Persistence.Uav;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities.UavEntities;
+using UavPathOptimization.Domain.Repositories;
 
 namespace UavPathOptimization.Application.UseCases.UavModels.Commands.UpdateUavModel;
 
 internal sealed class UpdateUavModelCommandHandler : IRequestHandler<UpdateUavModelCommand, ErrorOr<Unit>>
 {
-    private readonly IMediator _mediator;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUavModelRepository _uavModelRepository;
 
     private readonly IMapper _mapper;
 
-    public UpdateUavModelCommandHandler(IMediator mediator, IMapper mapper)
+    public UpdateUavModelCommandHandler(IUnitOfWork unitOfWork, IUavModelRepository uavModelRepository, IMapper mapper)
     {
-        _mediator = mediator;
+        _unitOfWork = unitOfWork;
+        _uavModelRepository = uavModelRepository;
         _mapper = mapper;
     }
 
     public async Task<ErrorOr<Unit>> Handle(UpdateUavModelCommand request, CancellationToken cancellationToken)
     {
-        var uavByName = await _mediator.Send(new GetUavModelFromDbByNameQuery(request.Name), cancellationToken);
+        var uavModel = await _uavModelRepository.GetByIdAsync(request.Id, cancellationToken);
+        if (uavModel == null)
+        {
+            return Errors.UavModelErrors.UavModelNotFound;
+        }
 
-        if (!uavByName.IsError)
+        // if name already exists return error
+        var uavByName = await _uavModelRepository.GetByNameAsync(request.Name, cancellationToken);
+        if (uavByName != null && uavByName.Id != request.Id)
         {
             return Errors.UavModelErrors.UavModelNameAlreadyExist;
         }
 
         var uav = _mapper.Map<UavModel>(request);
 
-        var command = new UpdateUavModelFromDbCommand(uav);
+        _uavModelRepository.Update(uav);
 
-        return await _mediator.Send(command, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return Unit.Value;
     }
 }
