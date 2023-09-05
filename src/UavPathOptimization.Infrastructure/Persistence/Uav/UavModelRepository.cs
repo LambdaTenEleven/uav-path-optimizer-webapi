@@ -30,7 +30,7 @@ internal sealed class UavModelRepository : Repository<UavModel>, IUavModelReposi
 
         int totalCount = await query.CountAsync(cancellationToken);
 
-        query = GetPageQuery(query, pageNumber, pageSize, sortField, sortDirection);
+        query = FormPageQuery(query, pageNumber, pageSize, sortField, sortDirection);
         var items = await query.ToListAsync(cancellationToken);
 
         return new ResultPage<UavModel>(items, totalCount, pageNumber, pageSize);

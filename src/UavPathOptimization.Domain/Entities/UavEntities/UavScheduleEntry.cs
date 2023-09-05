@@ -8,7 +8,7 @@ public record UavScheduleEntry
     {
     }
 
-    public UavScheduleEntry(GeoCoordinateDto location, bool isPbr, DateTime arrivalTime, DateTime departureTime, TimeSpan timeSpent, TimeSpan batteryTimeLeft)
+    public UavScheduleEntry(GeoCoordinateDto location, bool isPbr, DateTime? arrivalTime, DateTime? departureTime, TimeSpan timeSpent, TimeSpan batteryTimeLeft)
     {
         Location = location;
         IsPBR = isPbr;

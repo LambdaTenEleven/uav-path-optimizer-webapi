@@ -35,7 +35,7 @@ internal abstract class Repository<TEntity> where TEntity : Entity
         DbContext.Set<TEntity>().Remove(entity);
     }
 
-    protected static IQueryable<TEntity> GetPageQuery(
+    protected static IQueryable<TEntity> FormPageQuery(
         IQueryable<TEntity> query,
         int pageNumber,
         int pageSize,

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using UavPathOptimization.Application;
 using UavPathOptimization.Application.Mappers;
+using UavPathOptimization.Domain;
 using UavPathOptimization.Infrastructure;
 using UavPathOptimization.WebAPI;
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
+    .AddDomain()
     .AddWebApi(builder.Configuration)
     .AddApplication(builder.Configuration)
     .AddInfrastructure(builder.Configuration)
