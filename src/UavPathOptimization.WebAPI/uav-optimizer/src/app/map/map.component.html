@@ -1,7 +1,7 @@
 <div class="row">
   <h2>Path optimization</h2>
   <div class="col-md-9">
-    <div leaflet [leafletOptions]="mapOptions" [leafletLayers]="[markerLayer, pathLayers]" [(leafletZoom)]="mapZoom" [(leafletCenter)]="mapCenter" id="map" (leafletClick)="onMapClick($event)"></div>
+    <div leaflet [leafletOptions]="mapOptions" [leafletLayers]="[markerLayer, pathLayer, abrasMarkerLayer]" [(leafletZoom)]="mapZoom" [(leafletCenter)]="mapCenter" id="map" (leafletClick)="onMapClick($event)"></div>
   </div>
   <div class="col-md-3">
     <div>
@@ -17,6 +17,9 @@
       </button>
       <button (click)="clearMap()" class="btn btn-danger">Clear Map</button>
       <button (click)="goToSchedule()" class="btn btn-dark">Schedule</button>
+      <button *ngIf="!abrasMarkerIsAdding" (click)="setAbrasMarkerAddingMode(true)" class="btn btn-dark">Add ABRAS Point</button>
+      <button *ngIf="abrasMarkerIsAdding" (click)="setAbrasMarkerAddingMode(false)" class="btn btn-dark">Stop Adding ABRAS Point</button>
+
     </div>
     <div *ngIf="response != null">
       <h3>Paths:</h3>
