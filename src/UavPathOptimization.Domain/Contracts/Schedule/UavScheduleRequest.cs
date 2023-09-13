@@ -5,5 +5,6 @@ public record UavScheduleRequest(
     DateTime DepartureTimeStart,
     TimeSpan MonitoringTime,
     TimeSpan ChargingTime,
-    double AbrasSpeed
+    double AbrasSpeed,
+    GeoCoordinateDto AbrasDepotLocation
 );

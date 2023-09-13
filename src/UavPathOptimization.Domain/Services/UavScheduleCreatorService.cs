@@ -9,7 +9,7 @@ using UnitsNet.Units;
 
 namespace UavPathOptimization.Domain.Services;
 
-public class UavScheduleCreator : IUavScheduleCreator
+public class UavScheduleCreatorService : IUavScheduleCreatorService
 {
     public ErrorOr<UavPathSchedule> CreateScheduleForUavPath(UavPathDto path, DateTime departureTimeStart, TimeSpan monitoringTime,
         TimeSpan chargingTime, UavModel uavModel)
@@ -17,7 +17,7 @@ public class UavScheduleCreator : IUavScheduleCreator
         var scheduleUav = new List<UavScheduleEntry>();
 
         // calculate first point
-        var start = new UavScheduleEntry(path.Coordinates[0], false, null, departureTimeStart, TimeSpan.Zero, uavModel.MaxFlightTime);
+        var start = new UavScheduleEntry(path.Coordinates[0], null, departureTimeStart, TimeSpan.Zero, false, uavModel.MaxFlightTime);
 
         scheduleUav.Add(start);
 
@@ -45,7 +45,7 @@ public class UavScheduleCreator : IUavScheduleCreator
             var timeSpent = isPBR ? monitoringTime + chargingTime : monitoringTime;
             var departureTime = arrivalTime + timeSpent;
 
-            var entry = new UavScheduleEntry(path.Coordinates[i], isPBR, arrivalTime, departureTime, timeSpent, timeLeft);
+            var entry = new UavScheduleEntry(path.Coordinates[i], arrivalTime, departureTime, timeSpent, isPBR, timeLeft);
 
             scheduleUav.Add(entry);
         }
@@ -72,7 +72,7 @@ public class UavScheduleCreator : IUavScheduleCreator
 
         var timeLeftLast = scheduleUav.Last().BatteryTimeLeft - monitoringTime - flightTimeToDH;
 
-        var endPoint = new UavScheduleEntry(path.Coordinates[0], false, arrival, null, TimeSpan.Zero, timeLeftLast);
+        var endPoint = new UavScheduleEntry(path.Coordinates[0], arrival, null, TimeSpan.Zero, false, timeLeftLast);
 
         scheduleUav.Add(endPoint);
 

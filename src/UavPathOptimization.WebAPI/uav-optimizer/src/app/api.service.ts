@@ -34,13 +34,14 @@ export class ApiService {
     return this.http.get<any>(this.baseUrl + '/uav_model', { params });
   }
 
-  getSchedule(uavPaths: UavPath[], departureTimeStart: string, monitoringTime: string, chargingTime: string, abrasSpeed : number) : Observable<ScheduleResponse> {
+  getSchedule(uavPaths: UavPath[], departureTimeStart: string, monitoringTime: string, chargingTime: string, abrasSpeed : number, abrasDepotLocation: GeoCoordinate) : Observable<ScheduleResponse> {
     const payload = {
       Paths: uavPaths,
       DepartureTimeStart: departureTimeStart,
       MonitoringTime: monitoringTime,
       ChargingTime: chargingTime,
-      AbrasSpeed: abrasSpeed
+      AbrasSpeed: abrasSpeed,
+      AbrasDepotLocation: abrasDepotLocation
     };
 
     return this.http.post<any>(this.baseUrl + '/schedule', payload);

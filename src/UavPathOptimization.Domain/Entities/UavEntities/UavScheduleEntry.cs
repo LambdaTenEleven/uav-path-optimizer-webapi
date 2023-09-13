@@ -2,31 +2,26 @@
 
 namespace UavPathOptimization.Domain.Entities.UavEntities;
 
-public record UavScheduleEntry
+/// <summary>
+/// Uav schedule entry is a schedule entry with additional information about the UAV (e.g. battery time left)
+/// </summary>
+/// <seealso cref="ScheduleEntry" />
+public class UavScheduleEntry : ScheduleEntry
 {
-    public UavScheduleEntry()
+    public UavScheduleEntry(GeoCoordinateDto Location,
+        DateTime? ArrivalTime,
+        DateTime? DepartureTime,
+        TimeSpan TimeSpent,
+        bool IsPBR,
+        TimeSpan BatteryTimeLeft) : base(Location,
+        ArrivalTime,
+        DepartureTime,
+        TimeSpent)
     {
+        this.IsPBR = IsPBR;
+        this.BatteryTimeLeft = BatteryTimeLeft;
     }
-
-    public UavScheduleEntry(GeoCoordinateDto location, bool isPbr, DateTime? arrivalTime, DateTime? departureTime, TimeSpan timeSpent, TimeSpan batteryTimeLeft)
-    {
-        Location = location;
-        IsPBR = isPbr;
-        ArrivalTime = arrivalTime;
-        DepartureTime = departureTime;
-        TimeSpent = timeSpent;
-        BatteryTimeLeft = batteryTimeLeft;
-    }
-
-    public GeoCoordinateDto Location { get; set; } = null!;
 
     public bool IsPBR { get; set; }
-
-    public DateTime? ArrivalTime { get; set; }
-
-    public DateTime? DepartureTime { get; set; }
-
-    public TimeSpan TimeSpent { get; set; }
-
     public TimeSpan BatteryTimeLeft { get; set; }
 }

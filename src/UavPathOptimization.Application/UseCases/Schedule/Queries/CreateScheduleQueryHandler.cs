@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities.Results;
 using UavPathOptimization.Domain.Entities.UavEntities;
@@ -10,13 +11,15 @@ namespace UavPathOptimization.Application.UseCases.Schedule.Queries;
 
 internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateScheduleQuery, ErrorOr<UavScheduleResult>>
 {
-    private readonly IUavScheduleCreator _uavScheduleCreator;
+    private readonly IUavScheduleCreatorService _uavScheduleCreatorService;
     private readonly IUavModelRepository _uavModelRepository;
+    private readonly ILogger<CreateScheduleQueryHandler> _logger;
 
-    public CreateScheduleQueryHandler(IUavScheduleCreator uavScheduleCreator, IUavModelRepository uavModelRepository)
+    public CreateScheduleQueryHandler(IUavScheduleCreatorService uavScheduleCreatorService, IUavModelRepository uavModelRepository, ILogger<CreateScheduleQueryHandler> logger)
     {
-        _uavScheduleCreator = uavScheduleCreator;
+        _uavScheduleCreatorService = uavScheduleCreatorService;
         _uavModelRepository = uavModelRepository;
+        _logger = logger;
     }
 
     public async Task<ErrorOr<UavScheduleResult>> Handle(CreateScheduleQuery request, CancellationToken cancellationToken)
@@ -33,7 +36,7 @@ internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateSchedul
                 return Errors.UavModelErrors.UavModelNotFound;
             }
 
-            var schedulePathResult = _uavScheduleCreator.CreateScheduleForUavPath(path, request.DepartureTimeStart, request.MonitoringTime, request.ChargingTime, uav);
+            var schedulePathResult = _uavScheduleCreatorService.CreateScheduleForUavPath(path, request.DepartureTimeStart, request.MonitoringTime, request.ChargingTime, uav);
 
             if (schedulePathResult.IsError)
             {
@@ -42,6 +45,12 @@ internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateSchedul
 
             schedules.Add(schedulePathResult.Value);
         }
+
+#pragma warning disable CA1848
+#pragma warning disable CA2254
+        _logger.LogInformation(message: $"ABRAS Coords: {request.AbrasDepotLocation.Latitude}, {request.AbrasDepotLocation.Longitude}");
+#pragma warning restore CA2254
+#pragma warning restore CA1848
 
         // TODO ABRAS schedules
 

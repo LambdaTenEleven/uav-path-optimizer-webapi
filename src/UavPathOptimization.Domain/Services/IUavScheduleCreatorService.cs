@@ -5,7 +5,7 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 
 namespace UavPathOptimization.Domain.Services;
 
-public interface IUavScheduleCreator
+public interface IUavScheduleCreatorService
 {
     ErrorOr<UavPathSchedule> CreateScheduleForUavPath(UavPathDto path,
         DateTime departureTimeStart,

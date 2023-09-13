@@ -75,7 +75,9 @@ export class MapComponent implements OnInit {
     addMarker(latitude: number, longitude: number, type: MarkerType): void {
         const newMarker = marker([latitude, longitude], {
             icon: this.createMarkerIcon(type),
-            draggable: true
+            draggable: true,
+            // Name the marker after it's position index in the marker layer
+            title: type === MarkerType.Abras ? "ABRAS" : "Waypoint " + (this.markerLayer.getLayers().length + 1).toString(),
         });
 
         if (type === MarkerType.Abras) {
@@ -138,6 +140,12 @@ export class MapComponent implements OnInit {
             }
         } else {
             this.startingMarker = null;
+        }
+
+        // Update the title of the markers
+        for (let i = 0; i < markerLayers.length; i++) {
+            const marker = markerLayers[i] as Marker;
+            marker.options.title = "Waypoint " + (i + 1).toString();
         }
     }
 

@@ -55,7 +55,7 @@ export class ScheduleComponent implements OnInit {
             };
         });
 
-        this.apiService.getSchedule(uavPaths, this.departureTime, this.monitoringTime, this.chargingTime, this.pathResponse.abrasSpeed).subscribe((response: ScheduleResponse) => {
+        this.apiService.getSchedule(uavPaths, this.departureTime, this.monitoringTime, this.chargingTime, this.pathResponse.abrasSpeed, this.abrasCoordinates!).subscribe((response: ScheduleResponse) => {
             console.log("Schedule response:", response);
             this.schedule = new ScheduleResponse(response.uavPathSchedules.map((schedulePath: any) => {
                 return {
