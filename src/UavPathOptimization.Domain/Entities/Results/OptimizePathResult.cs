@@ -3,5 +3,5 @@
 namespace UavPathOptimization.Domain.Entities.Results;
 
 public record OptimizePathResult(
-    IList<UAVPath> UavPaths
+    IList<UavPath> UavPaths
 );

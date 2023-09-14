@@ -1,6 +1,6 @@
 ﻿namespace UavPathOptimization.Domain.Contracts.OptimizePath;
 
-public class UAVPath
+public class UavPath
 {
     public int UAVId { get; set; }
 
