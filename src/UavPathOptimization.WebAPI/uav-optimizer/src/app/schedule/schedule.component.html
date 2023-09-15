@@ -14,6 +14,10 @@
       <label for="chargingTime">Charging time</label>
       <input class="form-control" type="time" id="chargingTime" [(ngModel)]="chargingTime" value="00:05:00" step="1">
     </div>
+    <div class="form-group">
+      <label for="abrasSpeed">ABRAS Speed (km/h)</label>
+      <input class="form-control" type="number" id="abrasSpeed" [(ngModel)]="abrasSpeed" value="25" step="1">
+    </div>
     <br>
 
     <button *ngIf="!scheduleLoading" class="btn btn-primary" type="button" (click)="getSchedules()">Get schedule</button>

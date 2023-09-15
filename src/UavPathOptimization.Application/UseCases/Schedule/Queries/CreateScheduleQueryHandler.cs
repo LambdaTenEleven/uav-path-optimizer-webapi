@@ -3,29 +3,32 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities.Results;
-using UavPathOptimization.Domain.Entities.UavEntities;
+using UavPathOptimization.Domain.Entities.Schedule;
 using UavPathOptimization.Domain.Repositories;
 using UavPathOptimization.Domain.Services;
+using UnitsNet;
 
 namespace UavPathOptimization.Application.UseCases.Schedule.Queries;
 
 internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateScheduleQuery, ErrorOr<UavScheduleResult>>
 {
-    private readonly IUavScheduleCreatorService _uavScheduleCreatorService;
+    private readonly IScheduleCreatorService _scheduleCreatorService;
     private readonly IUavModelRepository _uavModelRepository;
     private readonly ILogger<CreateScheduleQueryHandler> _logger;
+    private readonly IPathOptimizationService _pathOptimizationService;
 
-    public CreateScheduleQueryHandler(IUavScheduleCreatorService uavScheduleCreatorService, IUavModelRepository uavModelRepository, ILogger<CreateScheduleQueryHandler> logger)
+    public CreateScheduleQueryHandler(IScheduleCreatorService scheduleCreatorService, IUavModelRepository uavModelRepository, ILogger<CreateScheduleQueryHandler> logger, IPathOptimizationService pathOptimizationService)
     {
-        _uavScheduleCreatorService = uavScheduleCreatorService;
+        _scheduleCreatorService = scheduleCreatorService;
         _uavModelRepository = uavModelRepository;
         _logger = logger;
+        _pathOptimizationService = pathOptimizationService;
     }
 
     public async Task<ErrorOr<UavScheduleResult>> Handle(CreateScheduleQuery request, CancellationToken cancellationToken)
     {
         // UAV schedules
-        var schedules = new List<UavPathSchedule>();
+        var schedules = new List<UavSchedule>();
 
         foreach (var path in request.Paths)
         {
@@ -36,7 +39,7 @@ internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateSchedul
                 return Errors.UavModelErrors.UavModelNotFound;
             }
 
-            var schedulePathResult = _uavScheduleCreatorService.CreateScheduleForUavPath(path, request.DepartureTimeStart, request.MonitoringTime, request.ChargingTime, uav);
+            var schedulePathResult = _scheduleCreatorService.CreateScheduleForUavPath(path, request.DepartureTimeStart, request.MonitoringTime, request.ChargingTime, uav);
 
             if (schedulePathResult.IsError)
             {
@@ -53,7 +56,22 @@ internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateSchedul
 #pragma warning restore CA1848
 
         // TODO ABRAS schedules
+        var speed = Speed.FromKilometersPerHour(request.AbrasSpeed);
+        // select PBR entries from all schedule entries and transform to GeoCoordinateDto
+        var pbrEntries = schedules
+            .SelectMany(x => x.UavScheduleEntries)
+            .Where(x => x.IsPBR)
+            .Select(x => x.Location)
+            .ToList();
 
-        return new UavScheduleResult(schedules, new List<UavScheduleEntry>());
+        pbrEntries.Insert(0, request.AbrasDepotLocation);
+
+        // calculate optimized path for PBR entries
+        // TODO: check for errors
+        var optimizedPath = _pathOptimizationService.OptimizePath(1, pbrEntries).Value;
+
+        var abrasSchedules = _scheduleCreatorService.CreateScheduleForAbrasPath(optimizedPath[0].Path, request.DepartureTimeStart, request.ChargingTime, speed, request.AbrasDepotLocation);
+
+        return new UavScheduleResult(schedules, abrasSchedules.Value);
     }
 }

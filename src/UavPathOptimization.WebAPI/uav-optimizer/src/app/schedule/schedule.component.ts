@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApiService} from "../api.service";
 import {UavModel} from "../../models/UavModel";
-import {ScheduleResponse, UavScheduleEntry} from "../../models/ScheduleResponse";
+import {AbrasSchedule, ScheduleEntry, ScheduleResponse, UavScheduleEntry} from "../../models/ScheduleResponse";
 import {GeoCoordinate} from "../../models/GeoCoordinate";
 
 @Component({
@@ -19,6 +19,7 @@ export class ScheduleComponent implements OnInit {
     monitoringTime: string = '';
     chargingTime: string = '';
     abrasCoordinates: GeoCoordinate | null = null;
+    abrasSpeed: number = 0;
 
     scheduleLoading: boolean = false;
 
@@ -55,18 +56,20 @@ export class ScheduleComponent implements OnInit {
             };
         });
 
-        this.apiService.getSchedule(uavPaths, this.departureTime, this.monitoringTime, this.chargingTime, this.pathResponse.abrasSpeed, this.abrasCoordinates!).subscribe((response: ScheduleResponse) => {
+        this.apiService.getSchedule(uavPaths, this.departureTime, this.monitoringTime, this.chargingTime, this.abrasSpeed, this.abrasCoordinates!).subscribe((response: any) => {
             console.log("Schedule response:", response);
             this.schedule = new ScheduleResponse(response.uavPathSchedules.map((schedulePath: any) => {
-                return {
-                    uavModelId: schedulePath.uavModelId,
-                    uavScheduleEntries: schedulePath.uavScheduleEntries.map((uavScheduleEntry: any) => {
-                        return new UavScheduleEntry(uavScheduleEntry.location, uavScheduleEntry.isPBR, uavScheduleEntry.arrivalTime, uavScheduleEntry.departureTime, uavScheduleEntry.timeSpent, uavScheduleEntry.batteryTimeLeft);
-                    })
-                };
-            }), response.abrasScheduleEntries.map((uavScheduleEntry: any) => {
-                return new UavScheduleEntry(uavScheduleEntry.location, uavScheduleEntry.isPBR, uavScheduleEntry.arrivalTime, uavScheduleEntry.departureTime, uavScheduleEntry.timeSpent, uavScheduleEntry.batteryTimeLeft);
-            }));
+                    return {
+                        uavModelId: schedulePath.uavModelId,
+                        uavScheduleEntries: schedulePath.uavScheduleEntries.map((uavScheduleEntry: any) => {
+                            return new UavScheduleEntry(uavScheduleEntry.location, uavScheduleEntry.arrivalTime, uavScheduleEntry.departureTime, uavScheduleEntry.timeSpent, uavScheduleEntry.batteryTimeLeft, uavScheduleEntry.isPBR);
+                        })
+                    };
+                }),
+                new AbrasSchedule(response.abrasSchedule.abrasScheduleEntries.map((abrasScheduleEntry: any) => {
+                    return new ScheduleEntry(abrasScheduleEntry.location, abrasScheduleEntry.arrivalTime, abrasScheduleEntry.departureTime, abrasScheduleEntry.timeSpent);
+                }))
+            );
         });
 
         this.scheduleLoading = false;

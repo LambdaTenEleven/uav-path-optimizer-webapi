@@ -7,8 +7,13 @@ public partial class Errors
     public static class Schedule
     {
         public static readonly Error UavModelMaxFlightTimeExceeded = Error.Failure(
-            code: "UavModel.MaxFlightTimeExceeded",
+            code: "Schedule.UavMaxFlightTimeExceeded",
             description: "Uav model max flight time exceeded."
+        );
+
+        public static readonly Error AbrasOperatingTimeExceeded = Error.Failure(
+            code: "Abras.OperatingTimeExceeded",
+            description: "Abras operating time exceeded."
         );
     }
 }

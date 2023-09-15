@@ -1,10 +1,12 @@
-﻿using UavPathOptimization.Domain.Contracts;
+﻿using System.Diagnostics;
+using UavPathOptimization.Domain.Contracts;
 
-namespace UavPathOptimization.Domain.Entities.UavEntities;
+namespace UavPathOptimization.Domain.Entities.Schedule;
 
 /// <summary>
 /// Schedule entry is a location with arrival and departure time and time spent at the location
 /// </summary>
+[DebuggerDisplay("ARR: {ArrivalTime}, DEP: {DepartureTime}, TIME: {TimeSpent}")]
 public class ScheduleEntry
 {
     public ScheduleEntry(GeoCoordinateDto Location, DateTime? ArrivalTime, DateTime? DepartureTime,

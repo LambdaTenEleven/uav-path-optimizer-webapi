@@ -1,8 +1,5 @@
 ﻿using ErrorOr;
-using GeoCoordinatePortable;
 using MediatR;
-using UavPathOptimization.Domain.Common.Errors;
-using UavPathOptimization.Domain.Contracts.OptimizePath;
 using UavPathOptimization.Domain.Entities.Results;
 using UavPathOptimization.Domain.Services;
 

@@ -2,7 +2,7 @@
 
 public class UavPath
 {
-    public int UAVId { get; set; }
+    public int VehicleId { get; set; }
 
     public IList<GeoCoordinateDto> Path { get; set; } = new List<GeoCoordinateDto>();
 

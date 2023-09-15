@@ -1,11 +1,13 @@
-﻿using UavPathOptimization.Domain.Contracts;
+﻿using System.Diagnostics;
+using UavPathOptimization.Domain.Contracts;
 
-namespace UavPathOptimization.Domain.Entities.UavEntities;
+namespace UavPathOptimization.Domain.Entities.Schedule;
 
 /// <summary>
 /// Uav schedule entry is a schedule entry with additional information about the UAV (e.g. battery time left)
 /// </summary>
 /// <seealso cref="ScheduleEntry" />
+[DebuggerDisplay("ARR: {ArrivalTime}, DEP: {DepartureTime}, TIME: {TimeSpent}, PBR: {IsPBR}, BTL: {BatteryTimeLeft}")]
 public class UavScheduleEntry : ScheduleEntry
 {
     public UavScheduleEntry(GeoCoordinateDto Location,

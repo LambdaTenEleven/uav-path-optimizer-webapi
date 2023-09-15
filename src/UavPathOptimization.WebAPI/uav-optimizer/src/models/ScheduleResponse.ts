@@ -2,63 +2,77 @@
 
 
 export class ScheduleResponse {
-  uavPathSchedules: SchedulePath[];
-  abrasScheduleEntries: UavScheduleEntry[];
+    uavPathSchedules: SchedulePath[];
+    abrasSchedule: AbrasSchedule;
 
-  constructor(uavPathSchedules: SchedulePath[], abrasScheduleEntries: UavScheduleEntry[]) {
-    this.uavPathSchedules = uavPathSchedules;
-    this.abrasScheduleEntries = abrasScheduleEntries;
-  }
+    constructor(uavPathSchedules: SchedulePath[], abrasSchedule: AbrasSchedule) {
+        this.uavPathSchedules = uavPathSchedules;
+        this.abrasSchedule = abrasSchedule;
+    }
 }
 
 export class SchedulePath {
-  uavModelId: string;
-  uavScheduleEntries: UavScheduleEntry[];
+    uavModelId: string;
+    uavScheduleEntries: UavScheduleEntry[];
 
-  constructor(uavModelId: string, uavScheduleEntries: UavScheduleEntry[]) {
-    this.uavModelId = uavModelId;
-    this.uavScheduleEntries = uavScheduleEntries;
-  }
+    constructor(uavModelId: string, uavScheduleEntries: UavScheduleEntry[]) {
+        this.uavModelId = uavModelId;
+        this.uavScheduleEntries = uavScheduleEntries;
+    }
 }
 
-export class UavScheduleEntry {
-  location: GeoCoordinate;
-  isPBR: boolean;
-  arrivalTime: string | null;
-  departureTime: string | null;
-  timeSpent: string;
-  batteryTimeLeft: string;
+export class AbrasSchedule {
+    abrasScheduleEntries: ScheduleEntry[];
 
-  constructor(location: GeoCoordinate, isPBR: boolean, arrivalTime: string | null, departureTime: string | null, timeSpent: string, batteryTimeLeft: string) {
-    this.location = location;
-    this.isPBR = isPBR;
-    this.timeSpent = timeSpent;
-    this.batteryTimeLeft = batteryTimeLeft;
-
-    this.arrivalTime = arrivalTime;
-    this.departureTime = departureTime;
-  }
-
-  private readonly dateFormatOptions: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  };
-
-  getArrivalTimeFormatted(): string {
-    if(this.arrivalTime == null) {
-      return '';
+    constructor(abrasScheduleEntries: ScheduleEntry[]) {
+        this.abrasScheduleEntries = abrasScheduleEntries;
     }
-    return new Date(this.arrivalTime).toLocaleString('uk-UA', this.dateFormatOptions);
-  }
+}
 
-  getDepartureTimeFormatted(): string {
-    if(this.departureTime == null) {
-      return '';
+export class ScheduleEntry {
+    location: GeoCoordinate;
+    arrivalTime: string | null;
+    departureTime: string | null;
+    timeSpent: string;
+
+    constructor(location: GeoCoordinate, arrivalTime: string | null, departureTime: string | null, timeSpent: string) {
+        this.location = location;
+        this.timeSpent = timeSpent;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
     }
-    return new Date(this.departureTime).toLocaleString('uk-UA', this.dateFormatOptions);
-  }
+
+    getArrivalTimeFormatted(): string {
+        if (this.arrivalTime == null) {
+            return '';
+        }
+        return new Date(this.arrivalTime).toLocaleString('uk-UA', this.dateFormatOptions);
+    }
+
+    getDepartureTimeFormatted(): string {
+        if (this.departureTime == null) {
+            return '';
+        }
+        return new Date(this.departureTime).toLocaleString('uk-UA', this.dateFormatOptions);
+    }
+
+    private readonly dateFormatOptions: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    };
+}
+
+export class UavScheduleEntry extends ScheduleEntry {
+    isPBR: boolean;
+    batteryTimeLeft: string;
+
+    constructor(location: GeoCoordinate, arrivalTime: string | null, departureTime: string | null, timeSpent: string, batteryTimeLeft: string, isPBR: boolean) {
+        super(location, arrivalTime, departureTime, timeSpent);
+        this.isPBR = isPBR;
+        this.batteryTimeLeft = batteryTimeLeft;
+    }
 }

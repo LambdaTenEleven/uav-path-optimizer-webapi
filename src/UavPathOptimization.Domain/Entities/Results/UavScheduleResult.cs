@@ -1,5 +1,5 @@
-﻿using UavPathOptimization.Domain.Entities.UavEntities;
+﻿using UavPathOptimization.Domain.Entities.Schedule;
 
 namespace UavPathOptimization.Domain.Entities.Results;
 
-public record UavScheduleResult(IList<UavPathSchedule> UavPathSchedules, IList<UavScheduleEntry> AbrasScheduleEntries);
+public record UavScheduleResult(IList<UavSchedule> UavPathSchedules, AbrasSchedule AbrasSchedule);

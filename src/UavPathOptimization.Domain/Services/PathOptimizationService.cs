@@ -4,7 +4,6 @@ using Google.OrTools.ConstraintSolver;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Contracts;
 using UavPathOptimization.Domain.Contracts.OptimizePath;
-using UavPathOptimization.Domain.Entities.Results;
 
 namespace UavPathOptimization.Domain.Services;
 
@@ -86,7 +85,7 @@ public class PathOptimizationService : IPathOptimizationService
                 routeDistance += routing.GetArcCostForVehicle(previousIndex, index, i);
             }
 
-            uavPath.UAVId = i;
+            uavPath.VehicleId = i;
             uavPath.Distance = (double)routeDistance / Scale;
             uavPaths.Add(uavPath);
         }

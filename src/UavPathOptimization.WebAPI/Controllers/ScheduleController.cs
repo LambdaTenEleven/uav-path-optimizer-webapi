@@ -30,7 +30,7 @@ public class ScheduleController : ApiController
         var result = await _mediator.Send(query);
 
         return result.Match(
-            ok => Ok(_mapper.Map<UavScheduleResponse>(ok)),
+            ok => Ok(new UavScheduleResponse(result.Value.UavPathSchedules, result.Value.AbrasSchedule)),
                 errors => Problem(errors)
         );
     }
