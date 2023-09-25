@@ -13,62 +13,81 @@ public class PathOptimizationService : IPathOptimizationService
 
     public ErrorOr<IList<UavPath>> OptimizePath(int vehicleCount, IList<GeoCoordinateDto> coordinates)
     {
-        // Map coordinates to GeoCoordinate
-        var path = coordinates.Select(x => new GeoCoordinate(x.Latitude, x.Longitude)).ToList();
-
-        // Create distance matrix
-        var count = coordinates.Count;
-        var matrix = new long[count, count];
-
-        for (var i = 0; i < count; i++)
+        if (coordinates == null || coordinates.Count < 2)
         {
-            for (var j = i; j < count; j++)
-            {
-                var distance = (long)(path[i].GetDistanceTo(path[j]) * Scale);
-                matrix[i, j] = distance;
-                matrix[j, i] = distance;
-            }
+            return Errors.OptimizePath.InvalidInputError;
         }
 
-        // Create Routing Index Manager
-        var manager =
-            new RoutingIndexManager(matrix.GetLength(0), vehicleCount, 0);
+        var path = coordinates.Select(x => new GeoCoordinate(x.Latitude, x.Longitude)).ToList();
 
-        // Create Routing Model.
-        var routing = new RoutingModel(manager);
+        var matrix = CreateDistanceMatrix(path);
 
-        // Create and register a transit callback.
-        int transitCallbackIndex = routing.RegisterTransitCallback((long fromIndex, long toIndex) =>
-           {
-               // Convert from routing variable Index to
-               // distance matrix NodeIndex.
-               var fromNode = manager.IndexToNode(fromIndex);
-               var toNode = manager.IndexToNode(toIndex);
-               return matrix[fromNode, toNode];
-           });
+        var (routing, manager) = InitializeRoutingModel(matrix, vehicleCount);
 
-        // Define cost of each arc.
-        routing.SetArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
+        var searchParameters = ConfigureRoutingSearchParameters();
 
-        // Add Distance constraint.
-        routing.AddDimension(transitCallbackIndex, 0, 30000000, //TODO figure out the exact value for this
-                             true, // start cumul to zero
-                             "Distance");
-        RoutingDimension distanceDimension = routing.GetMutableDimension("Distance");
-        distanceDimension.SetGlobalSpanCostCoefficient(100000);
-
-        // Setting first solution heuristic.
-        RoutingSearchParameters searchParameters =
-            operations_research_constraint_solver.DefaultRoutingSearchParameters();
-        searchParameters.FirstSolutionStrategy = FirstSolutionStrategy.Types.Value.PathCheapestArc;
-
-        // Solve the problem.
         var solution = routing.SolveWithParameters(searchParameters);
         if (solution is null)
         {
             return Errors.OptimizePath.SolutionError;
         }
 
+        var result = ExtractUavPaths(solution, manager, routing, vehicleCount, coordinates).ToList();
+        return result;
+    }
+
+    private static long[,] CreateDistanceMatrix(IEnumerable<GeoCoordinate> path)
+    {
+        var coordinatesList = path.ToList();
+        var count = coordinatesList.Count;
+        var matrix = new long[count, count];
+
+        for (var i = 0; i < count; i++)
+        {
+            for (var j = i; j < count; j++)
+            {
+                var distance = (long)(coordinatesList[i].GetDistanceTo(coordinatesList[j]) * Scale);
+                matrix[i, j] = distance;
+                matrix[j, i] = distance;
+            }
+        }
+
+        return matrix;
+    }
+
+    private static (RoutingModel, RoutingIndexManager) InitializeRoutingModel(long[,] matrix, int vehicleCount)
+    {
+        var manager = new RoutingIndexManager(matrix.GetLength(0), vehicleCount, 0);
+        var routing = new RoutingModel(manager);
+
+        int transitCallbackIndex = routing.RegisterTransitCallback((long fromIndex, long toIndex) =>
+        {
+            // Convert from routing variable Index to
+            // distance matrix NodeIndex.
+            var fromNode = manager.IndexToNode(fromIndex);
+            var toNode = manager.IndexToNode(toIndex);
+            return matrix[fromNode, toNode];
+        });
+
+        routing.SetArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
+        routing.AddDimension(transitCallbackIndex, 0, 30000000,
+            true, // start cumul to zero
+            "Distance");
+        routing.GetMutableDimension("Distance").SetGlobalSpanCostCoefficient(100000);
+
+        return (routing, manager);
+    }
+
+    private static RoutingSearchParameters ConfigureRoutingSearchParameters()
+    {
+        var searchParameters = operations_research_constraint_solver.DefaultRoutingSearchParameters();
+        searchParameters.FirstSolutionStrategy = FirstSolutionStrategy.Types.Value.PathCheapestArc;
+        return searchParameters;
+    }
+
+    private static IList<UavPath> ExtractUavPaths(Assignment solution, RoutingIndexManager manager,
+        RoutingModel routing, int vehicleCount, IList<GeoCoordinateDto> coordinates)
+    {
         var uavPaths = new List<UavPath>();
 
         for (int i = 0; i < vehicleCount; ++i)

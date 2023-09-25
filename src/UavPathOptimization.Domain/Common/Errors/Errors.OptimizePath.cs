@@ -10,5 +10,10 @@ public static partial class Errors
             code: "OptimizePath.SolutionError",
             description: "Solution error."
         );
+
+        public static readonly Error InvalidInputError = Error.Validation(
+            code: "OptimizePath.InvalidInputError",
+            description: "Invalid input error."
+        );
     }
 }

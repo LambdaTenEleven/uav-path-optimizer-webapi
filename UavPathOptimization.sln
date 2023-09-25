@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.WebAPI"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.Application.IntegrationTests", "tests\UavPathOptimization.Application.IntegrationTests\UavPathOptimization.Application.IntegrationTests.csproj", "{BBCC159F-9265-48C7-A168-654792E77A72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UavPathOptimization.Domain.UnitTests", "tests\UavPathOptimization.Domain.UnitTests\UavPathOptimization.Domain.UnitTests.csproj", "{325F6147-465C-4CB6-9BD2-60D5F07677D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{BBCC159F-9265-48C7-A168-654792E77A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBCC159F-9265-48C7-A168-654792E77A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBCC159F-9265-48C7-A168-654792E77A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{325F6147-465C-4CB6-9BD2-60D5F07677D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325F6147-465C-4CB6-9BD2-60D5F07677D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325F6147-465C-4CB6-9BD2-60D5F07677D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325F6147-465C-4CB6-9BD2-60D5F07677D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B5E2BDE9-380D-475D-8FA5-C7BC500ADD38} = {B586A568-477C-4A9B-9D0F-23FA5567BF69}
@@ -54,5 +60,6 @@ Global
 		{9C29FAA8-761C-459D-A5BB-640980E56B31} = {A0A55B7A-28B3-4020-ABE1-D129B8ECEFE0}
 		{8796CE2F-F369-45CC-B8EB-79CCB88832F4} = {B586A568-477C-4A9B-9D0F-23FA5567BF69}
 		{BBCC159F-9265-48C7-A168-654792E77A72} = {A0A55B7A-28B3-4020-ABE1-D129B8ECEFE0}
+		{325F6147-465C-4CB6-9BD2-60D5F07677D6} = {A0A55B7A-28B3-4020-ABE1-D129B8ECEFE0}
 	EndGlobalSection
 EndGlobal
