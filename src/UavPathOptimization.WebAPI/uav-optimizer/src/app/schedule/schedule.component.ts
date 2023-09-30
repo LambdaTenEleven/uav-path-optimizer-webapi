@@ -70,6 +70,8 @@ export class ScheduleComponent implements OnInit {
                     return new ScheduleEntry(abrasScheduleEntry.location, abrasScheduleEntry.arrivalTime, abrasScheduleEntry.departureTime, abrasScheduleEntry.timeSpent);
                 }))
             );
+
+            console.log("Schedule:", this.schedule);
         });
 
         this.scheduleLoading = false;

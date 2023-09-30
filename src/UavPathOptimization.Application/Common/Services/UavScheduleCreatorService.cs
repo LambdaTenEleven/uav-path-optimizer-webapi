@@ -7,12 +7,16 @@ using UavPathOptimization.Domain.Entities.UavEntities;
 using UnitsNet;
 using UnitsNet.Units;
 
-namespace UavPathOptimization.Domain.Services;
+namespace UavPathOptimization.Application.Common.Services;
 
-public class ScheduleCreatorService : IScheduleCreatorService
+public class UavScheduleCreatorService : IUavScheduleCreatorService
 {
-    public ErrorOr<UavSchedule> CreateScheduleForUavPath(UavPathDto path, DateTime departureTimeStart, TimeSpan monitoringTime,
-        TimeSpan chargingTime, UavModel uavModel)
+    public ErrorOr<UavSchedule> CreateScheduleForUavPath(
+        UavPathDto path,
+        DateTime departureTimeStart,
+        TimeSpan monitoringTime,
+        TimeSpan chargingTime,
+        UavModel uavModel)
     {
         var scheduleUav = new List<UavScheduleEntry>();
 
@@ -69,53 +73,12 @@ public class ScheduleCreatorService : IScheduleCreatorService
         }
 
         var arrival = scheduleUav.Last().DepartureTime + flightTimeToDH;
-
         var timeLeftLast = scheduleUav.Last().BatteryTimeLeft - monitoringTime - flightTimeToDH;
-
         var endPoint = new UavScheduleEntry(path.Coordinates[0], arrival, null, TimeSpan.Zero, false, timeLeftLast);
 
         scheduleUav.Add(endPoint);
 
         return new UavSchedule(path.UavModelId, scheduleUav);
-    }
-
-    public ErrorOr<AbrasSchedule> CreateScheduleForAbrasPath(IList<GeoCoordinateDto> optimizedPath, DateTime departureTimeStart, TimeSpan operatingTime,
-        Speed abrasSpeed, GeoCoordinateDto abrasStartPoint)
-    {
-        // start calculating schedule entries for Abras
-        var scheduleAbras = new List<ScheduleEntry>();
-
-        // calculate first point
-        var start = new ScheduleEntry(optimizedPath[0], null, departureTimeStart, TimeSpan.Zero);
-
-        scheduleAbras.Add(start);
-
-        for (int i = 1; i < optimizedPath.Count; i++)
-        {
-            var distanceMeters = CalculateDistance(optimizedPath[i], optimizedPath[i - 1]);
-            var flightTime = (distanceMeters / abrasSpeed).ToTimeSpan();
-
-            var arrivalTime = (scheduleAbras[i - 1].ArrivalTime ?? scheduleAbras[i - 1].DepartureTime) + flightTime + scheduleAbras[i - 1].TimeSpent;
-
-            var timeSpent = operatingTime;
-            var departureTime = arrivalTime + timeSpent;
-
-            var entry = new ScheduleEntry(optimizedPath[i], arrivalTime, departureTime, timeSpent);
-
-            scheduleAbras.Add(entry);
-        }
-
-        // calculate last point
-        var distanceToDH = CalculateDistance(optimizedPath[0], scheduleAbras.Last().Location);
-        var flightTimeToDH = (distanceToDH / abrasSpeed).ToTimeSpan();
-
-        var arrival = scheduleAbras.Last().DepartureTime + flightTimeToDH;
-
-        var endPoint = new ScheduleEntry(optimizedPath[0], arrival, null, TimeSpan.Zero);
-
-        scheduleAbras.Add(endPoint);
-
-        return new AbrasSchedule(scheduleAbras);
     }
 
     private static Length CalculateDistance(GeoCoordinateDto point1, GeoCoordinateDto point2)

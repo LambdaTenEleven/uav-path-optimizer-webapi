@@ -5,6 +5,7 @@ using UavPathOptimization.Application.Common.Behaviours;
 using UavPathOptimization.Domain.Common.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using UavPathOptimization.Application.Common.Services;
 
 namespace UavPathOptimization.Application;
 
@@ -26,6 +27,9 @@ public static class DependencyInjection
         var passwordSettings = new PasswordSettings();
         builderConfiguration.Bind(PasswordSettings.SectionName, passwordSettings);
         services.AddSingleton(Options.Create(passwordSettings));
+
+        services.AddScoped<IUavScheduleCreatorService, UavScheduleCreatorService>();
+        services.AddScoped<IAbrasScheduleCreator, AbrasScheduleCreator>();
 
         return services;
     }
