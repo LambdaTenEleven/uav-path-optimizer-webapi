@@ -1,60 +1,84 @@
-<div *ngIf="pathResponse">
+<div *ngIf="pathResponse" class="row">
   <h2>Schedule</h2>
-  <p>Please, review the formed paths and select a UAV for each one.</p>
-  <div class="form">
-    <div class="form-group">
-      <label for="departureTime">Departure time</label>
-      <input class="form-control" type="datetime-local" id="departureTime" [(ngModel)]="departureTime" required>
-    </div>
-    <div class="form-group">
-      <label for="monitoringTime">Monitoring time</label>
-      <input class="form-control" type="time" id="monitoringTime" [(ngModel)]="monitoringTime" value="00:05:00" step="1">
-    </div>
-    <div class="form-group">
-      <label for="chargingTime">Charging time</label>
-      <input class="form-control" type="time" id="chargingTime" [(ngModel)]="chargingTime" value="00:05:00" step="1">
-    </div>
-    <div class="form-group">
-      <label for="abrasSpeed">ABRAS Speed (km/h)</label>
-      <input class="form-control" type="number" id="abrasSpeed" [(ngModel)]="abrasSpeed" value="25" step="1">
-    </div>
-    <br>
 
-    <button *ngIf="!scheduleLoading" class="btn btn-primary" type="button" (click)="getSchedules()">Get schedule</button>
-    <button *ngIf="scheduleLoading" class="btn btn-primary" type="button" disabled>
-      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      Loading...
-    </button>
+  <div class="col-md-9">
+    <p>Please, review the formed paths and select a UAV for each one.</p>
+    <ng-container *ngFor="let path of pathResponse.uavPaths; let uavIndex = index">
+      <h3>Path #{{ uavIndex }}</h3>
+      <app-uav-model-dropdown
+        (selectedUavModelEvent)="selectedUavModelEvent($event, uavIndex)"
+        [pageSize]="10">
+      </app-uav-model-dropdown>
+      <mat-tab-group>
+        <mat-tab label="Info">
+          <table class="table" *ngIf="schedule">
+            <thead>
+            <tr>
+              <th>Location</th>
+              <th>PBR</th>
+              <th>Arrival Time</th>
+              <th>Departure Time</th>
+              <th>Time Spent</th>
+              <th>Battery Time Left</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let entry of schedule.uavPathSchedules[uavIndex].uavScheduleEntries">
+              <td>{{ entry.location.latitude }}, {{ entry.location.longitude }}</td>
+              <td>{{ entry.isPBR }}</td>
+              <td>{{ entry.getArrivalTimeFormatted() }}</td>
+              <td>{{ entry.getDepartureTimeFormatted() }}</td>
+              <td>{{ entry.timeSpent }}</td>
+              <td>{{ entry.batteryTimeLeft }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+        <mat-tab label="Gantt chart">
+          <google-chart [type]="ChartType.Gantt"
+                        [data]="chartData[uavIndex]"
+                        [columns]="chartColumns"
+                        [dynamicResize]="true"
+                        [options]="chartOptions">
+
+          </google-chart>
+        </mat-tab>
+      </mat-tab-group>
+
+    </ng-container>
   </div>
-  <br>
 
-  <ng-container *ngFor="let path of pathResponse.uavPaths; let uavIndex = index">
-    <h3>Path ID: {{ path.uavId }}</h3>
-    <app-uav-model-dropdown
-      (selectedUavModelEvent)="selectedUavModelEvent($event, uavIndex)"
-      [pageSize]="10">
-    </app-uav-model-dropdown>
-    <table class="table" *ngIf="schedule">
-      <thead>
-        <tr>
-          <th>Location</th>
-          <th>PBR</th>
-          <th>Arrival Time</th>
-          <th>Departure Time</th>
-          <th>Time Spent</th>
-          <th>Battery Time Left</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let entry of schedule.uavPathSchedules[uavIndex].uavScheduleEntries">
-          <td>{{ entry.location.latitude }}, {{ entry.location.longitude }}</td>
-          <td>{{ entry.isPBR }}</td>
-          <td>{{ entry.getArrivalTimeFormatted() }}</td>
-          <td>{{ entry.getDepartureTimeFormatted() }}</td>
-          <td>{{ entry.timeSpent }}</td>
-          <td>{{ entry.batteryTimeLeft }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </ng-container>
+  <div class="col-md-3">
+    <h3>Parameters</h3>
+    <div class="form">
+      <div class="form-group">
+        <label for="departureTime">Departure time</label>
+        <input class="form-control" type="datetime-local" id="departureTime" [(ngModel)]="departureTime"
+               required>
+      </div>
+      <div class="form-group">
+        <label for="monitoringTime">Monitoring time</label>
+        <input class="form-control" type="time" id="monitoringTime" [(ngModel)]="monitoringTime"
+               value="00:05:00" step="1">
+      </div>
+      <div class="form-group">
+        <label for="chargingTime">Charging time</label>
+        <input class="form-control" type="time" id="chargingTime" [(ngModel)]="chargingTime" value="00:05:00"
+               step="1">
+      </div>
+      <div class="form-group">
+        <label for="abrasSpeed">ABRAS Speed (km/h)</label>
+        <input class="form-control" type="number" id="abrasSpeed" [(ngModel)]="abrasSpeed" value="25" step="1">
+      </div>
+      <br>
+
+      <button *ngIf="!scheduleLoading" class="btn btn-primary" type="button" (click)="getSchedules()">Get
+        schedule
+      </button>
+      <button *ngIf="scheduleLoading" class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+      </button>
+    </div>
+  </div>
 </div>

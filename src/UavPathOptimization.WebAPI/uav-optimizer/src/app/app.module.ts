@@ -11,6 +11,9 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { UavModelDropdownComponent } from './uav-model-dropdown/uav-model-dropdown.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ErrorComponent } from './error/error.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatTabsModule} from "@angular/material/tabs";
+import {GoogleChartsModule} from "angular-google-charts";
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import { ErrorComponent } from './error/error.component';
         HttpClientModule,
         FormsModule,
         LeafletModule,
-        NgSelectModule
+        NgSelectModule,
+        BrowserAnimationsModule,
+        MatTabsModule,
+        GoogleChartsModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

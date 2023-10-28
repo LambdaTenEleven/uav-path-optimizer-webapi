@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <Folder Include="Common\MapperConfigs\" />
+      <Folder Include="uav-optimizer\src\app\tabs\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 
