@@ -1,13 +1,10 @@
 ﻿using ErrorOr;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using UavPathOptimization.Application.Common.Services;
 using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Entities.Results;
 using UavPathOptimization.Domain.Entities.Schedule;
 using UavPathOptimization.Domain.Repositories;
-using UavPathOptimization.Domain.Services;
-using UnitsNet;
 
 namespace UavPathOptimization.Application.UseCases.Schedule.Queries;
 
@@ -40,7 +37,9 @@ internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateSchedul
         var abrasScheduleResult = _abrasScheduleCreator.CreateScheduleForAbras(
             schedulesResult.Value,
             request.AbrasSpeed,
-            request.AbrasDepotLocation);
+            request.AbrasDepotLocation,
+            request.DepartureTimeStart,
+            request.ChargingTime);
 
         if (abrasScheduleResult.IsError)
         {

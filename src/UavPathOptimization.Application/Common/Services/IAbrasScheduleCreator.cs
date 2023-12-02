@@ -10,5 +10,7 @@ public interface IAbrasScheduleCreator
     public ErrorOr<UavScheduleResult> CreateScheduleForAbras(
         IList<UavSchedule> uavSchedules,
         double speed,
-        GeoCoordinateDto abrasDepotLocation);
+        GeoCoordinateDto abrasDepotLocation,
+        DateTime departureTimeStart,
+        TimeSpan chargingTime);
 }

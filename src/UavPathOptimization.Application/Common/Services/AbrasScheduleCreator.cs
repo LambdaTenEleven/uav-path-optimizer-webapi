@@ -10,31 +10,51 @@ public class AbrasScheduleCreator : IAbrasScheduleCreator
 {
     public ErrorOr<UavScheduleResult> CreateScheduleForAbras(IList<UavSchedule> uavSchedules,
         double speed,
-        GeoCoordinateDto abrasDepotLocation)
+        GeoCoordinateDto abrasDepotLocation,
+        DateTime departureTimeStart,
+        TimeSpan chargingTime)
     {
         var pbrEntries = GetPbrEntries(uavSchedules);
         var currentLocation = abrasDepotLocation;
         var currentTime = DateTime.MinValue;
 
-        var abrasScheduleEntries = new List<ScheduleEntry>();
+        var abrasScheduleEntries = new List<ScheduleEntry>
+        {
+            // Add depot entry
+            new ScheduleEntry(abrasDepotLocation, null, departureTimeStart, TimeSpan.Zero)
+        };
 
         foreach (var (uavSchedule, pbrEntry) in pbrEntries)
         {
             var elapsedTime = CalculateElapsedTime(currentLocation, pbrEntry.Location, speed);
 
-            if (pbrEntry.ArrivalTime - elapsedTime <= currentTime.AddMinutes(1))
+            // Wait time for ABRAS to reach the PBR point before the UAV arrives
+            var waitTime = TimeSpan.Zero;
+            if (pbrEntry.ArrivalTime - elapsedTime > currentTime)
+            {
+                waitTime = pbrEntry.ArrivalTime.Value - elapsedTime - currentTime;
+            }
+            else
             {
                 // Conflict: Shift the UAV's schedule
-                var conflictDuration = currentTime.AddMinutes(1).Add(elapsedTime) - pbrEntry.ArrivalTime!.Value;
+                var conflictDuration = currentTime.Add(elapsedTime) - pbrEntry.ArrivalTime.Value.AddMinutes(-1);
                 ShiftUavSchedule(uavSchedule, conflictDuration);
             }
 
-            currentTime = pbrEntry.ArrivalTime.Value.AddMinutes(-1);
+            currentTime += elapsedTime + waitTime;
             var departureTime = pbrEntry.ArrivalTime.Value.Add(pbrEntry.TimeSpent);
-            abrasScheduleEntries.Add(new ScheduleEntry(pbrEntry.Location, currentTime, departureTime,
-                departureTime - currentTime));
+            abrasScheduleEntries.Add(new ScheduleEntry(pbrEntry.Location, currentTime, departureTime, elapsedTime));
+
+            currentTime = departureTime;
             currentLocation = pbrEntry.Location;
         }
+
+        // calculate the time to return to the depot
+        var returnTime = CalculateElapsedTime(currentLocation, abrasDepotLocation, speed);
+
+        // Add depot entry
+        abrasScheduleEntries.Add(
+            new ScheduleEntry(abrasDepotLocation, currentTime.Add(returnTime), null, TimeSpan.Zero));
 
         return new UavScheduleResult(uavSchedules, new AbrasSchedule(abrasScheduleEntries));
     }

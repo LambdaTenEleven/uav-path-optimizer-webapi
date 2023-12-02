@@ -26,6 +26,7 @@ export class ScheduleComponent implements OnInit {
   scheduleLoading: boolean = false;
 
   chartData: any[] = [];
+  abrasChartData: any;
   chartColumns: any[] = [
     {type: 'string', role: 'domain'},
     {type: 'string', role: 'data'},
@@ -96,6 +97,9 @@ export class ScheduleComponent implements OnInit {
       this.schedule.uavPathSchedules.forEach((schedulePath: any) => {
         this.chartData.push(this.generateChartData(schedulePath.uavScheduleEntries));
       });
+
+      // generate ABRAS chart
+      this.abrasChartData = this.generateAbrasChartData(this.schedule.abrasSchedule.abrasScheduleEntries);
     });
 
     this.scheduleLoading = false;
@@ -175,6 +179,77 @@ export class ScheduleComponent implements OnInit {
 
     return rows;
   }
+
+  generateAbrasChartData(abrasScheduleEntries: ScheduleEntry[]): any {
+    const rows: any[][] = [];
+
+    if (this.departureTime) {
+      const initialDate = new Date(this.departureTime);
+      const firstDepartureDate = abrasScheduleEntries[0].departureTime
+        ? new Date(abrasScheduleEntries[0].departureTime as string)
+        : null;
+
+      if (firstDepartureDate && firstDepartureDate.getTime() > initialDate.getTime()) {
+        const waitingDuration = firstDepartureDate.getTime() - initialDate.getTime();
+        // Add a waiting task
+        rows.push([
+          'waiting-task',
+          'Waiting',
+          null,
+          initialDate,
+          firstDepartureDate,
+          waitingDuration,
+          100,
+          null,
+        ]);
+      }
+    }
+
+    abrasScheduleEntries.forEach((entry, index) => {
+      // Parse arrival and departure times as Date objects
+      const startDate = entry.arrivalTime ? new Date(entry.arrivalTime as string) : null;
+      const endDate = entry.departureTime ? new Date(entry.departureTime as string) : null;
+
+      if (index > 0) {
+        const moveStartDate = abrasScheduleEntries[index - 1].departureTime
+          ? new Date(abrasScheduleEntries[index - 1].departureTime as string)
+          : null;
+        const moveDuration = startDate && moveStartDate ? startDate.getTime() - moveStartDate.getTime() : 0;
+
+        // Add a moving task
+        rows.push([
+          'move-task-' + index,
+          'Moving',
+          null,
+          moveStartDate,
+          startDate,
+          moveDuration,
+          100,
+          null,
+        ]);
+      }
+
+      const waitingDuration =
+        startDate && endDate ? endDate.getTime() - startDate.getTime() : 0;
+
+      // Add a monitoring or charging task only if endDate is not null
+      if (endDate !== null && waitingDuration > 0) {
+        rows.push([
+          'waiting-task-' + index,
+          "Waiting",
+          null,
+          startDate,
+          endDate,
+          waitingDuration,
+          100,
+          null,
+        ]);
+      }
+    });
+
+    return rows;
+  }
+
 
   readonly ChartType = ChartType;
 }

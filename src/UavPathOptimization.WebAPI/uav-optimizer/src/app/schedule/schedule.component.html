@@ -44,8 +44,40 @@
           </google-chart>
         </mat-tab>
       </mat-tab-group>
-
     </ng-container>
+
+    <h3>ABRAS Path</h3>
+    <mat-tab-group>
+        <mat-tab label="Info">
+          <table class="table" *ngIf="schedule">
+            <thead>
+            <tr>
+              <th>Location</th>
+              <th>Arrival Time</th>
+              <th>Departure Time</th>
+              <th>Time Spent</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let entry of schedule.abrasSchedule.abrasScheduleEntries">
+              <td>{{ entry.location.latitude }}, {{ entry.location.longitude }}</td>
+              <td>{{ entry.getArrivalTimeFormatted() }}</td>
+              <td>{{ entry.getDepartureTimeFormatted() }}</td>
+              <td>{{ entry.timeSpent }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+        <mat-tab label="Gantt chart">
+          <google-chart [type]="ChartType.Gantt"
+                        [data]="abrasChartData"
+                        [columns]="chartColumns"
+                        [dynamicResize]="true"
+                        [options]="chartOptions">
+
+          </google-chart>
+        </mat-tab>
+      </mat-tab-group>
   </div>
 
   <div class="col-md-3">
