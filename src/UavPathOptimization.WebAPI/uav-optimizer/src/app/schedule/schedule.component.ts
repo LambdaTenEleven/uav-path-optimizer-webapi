@@ -22,6 +22,7 @@ export class ScheduleComponent implements OnInit {
   chargingTime: string = '';
   abrasCoordinates: GeoCoordinate | null = null;
   abrasSpeed: number = 0;
+  isWeatherEnabled: boolean = false;
 
   scheduleLoading: boolean = false;
 

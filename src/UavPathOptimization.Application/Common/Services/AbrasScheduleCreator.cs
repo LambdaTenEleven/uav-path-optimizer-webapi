@@ -15,6 +15,12 @@ public class AbrasScheduleCreator : IAbrasScheduleCreator
         TimeSpan chargingTime)
     {
         var pbrEntries = GetPbrEntries(uavSchedules);
+
+        if(pbrEntries.Count == 0)
+        {
+            return new UavScheduleResult(uavSchedules, new AbrasSchedule(new List<ScheduleEntry>()));
+        }
+
         var currentLocation = abrasDepotLocation;
         var currentTime = DateTime.MinValue;
 

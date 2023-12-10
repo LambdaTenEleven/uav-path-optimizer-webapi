@@ -103,6 +103,11 @@
         <input class="form-control" type="number" id="abrasSpeed" [(ngModel)]="abrasSpeed" value="25" step="1">
       </div>
       <br>
+      <div class="form-group">
+        <label for="weather">Use weather conditions</label>
+        <input type="checkbox" id="weather" [(ngModel)]="isWeatherEnabled">
+      </div>
+      <br>
 
       <button *ngIf="!scheduleLoading" class="btn btn-primary" type="button" (click)="getSchedules()">Get
         schedule
