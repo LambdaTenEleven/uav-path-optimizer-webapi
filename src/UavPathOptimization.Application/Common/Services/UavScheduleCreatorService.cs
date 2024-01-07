@@ -4,6 +4,7 @@ using UavPathOptimization.Domain.Common.Errors;
 using UavPathOptimization.Domain.Contracts;
 using UavPathOptimization.Domain.Entities.Schedule;
 using UavPathOptimization.Domain.Entities.UavEntities;
+using UavPathOptimization.Domain.Services;
 using UnitsNet;
 using UnitsNet.Units;
 
@@ -11,12 +12,20 @@ namespace UavPathOptimization.Application.Common.Services;
 
 public class UavScheduleCreatorService : IUavScheduleCreatorService
 {
+    private readonly IWeatherClient _weatherClient;
+
+    public UavScheduleCreatorService(IWeatherClient weatherClient)
+    {
+        _weatherClient = weatherClient;
+    }
+
     public ErrorOr<UavSchedule> CreateScheduleForUavPath(
         UavPathDto path,
         DateTime departureTimeStart,
         TimeSpan monitoringTime,
         TimeSpan chargingTime,
-        UavModel uavModel)
+        UavModel uavModel,
+        bool useWeatherData)
     {
         var scheduleUav = new List<UavScheduleEntry>();
 

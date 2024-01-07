@@ -179,6 +179,8 @@ export class MapComponent implements OnInit {
             }
         );
 
+        console.log("Paths optimized:", this.response)
+
         this.saveMapState();
     }
 

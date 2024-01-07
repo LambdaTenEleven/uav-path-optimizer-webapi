@@ -11,5 +11,6 @@ public sealed record CreateScheduleQuery(
     TimeSpan MonitoringTime,
     TimeSpan ChargingTime,
     double AbrasSpeed,
-    GeoCoordinateDto AbrasDepotLocation
+    GeoCoordinateDto AbrasDepotLocation,
+    bool UseWeatherData
 ) : IRequest<ErrorOr<UavScheduleResult>>;

@@ -64,7 +64,7 @@ internal sealed class CreateScheduleQueryHandler : IRequestHandler<CreateSchedul
             }
 
             var schedulePathResult = _uavScheduleCreatorService.CreateScheduleForUavPath(path, request.DepartureTimeStart,
-                request.MonitoringTime, request.ChargingTime, uav);
+                request.MonitoringTime, request.ChargingTime, uav, request.UseWeatherData);
 
             if (schedulePathResult.IsError)
             {

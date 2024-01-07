@@ -8,11 +8,11 @@ export class OptimizePathResponse {
 }
 
 export class UavPath {
-  uavId: number;
+  vehicleId: number;
   path: GeoCoordinate[];
   distance: number;
-  constructor(uavId: number, path: GeoCoordinate[], distance: number) {
-    this.uavId = uavId;
+  constructor(vehicleId: number, path: GeoCoordinate[], distance: number) {
+    this.vehicleId = vehicleId;
     this.path = path;
     this.distance = distance;
   }
